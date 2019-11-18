@@ -10,7 +10,7 @@ from .helpers import apology
 def hello():
     return render_template("index.html")
 
-@app.route("/register", methods=["GET", "POST"])
+@app.route("/register.html", methods=["GET", "POST"])
 def register():
     """Register user"""
     if request.method=='GET':
@@ -36,6 +36,9 @@ def register():
         db.execute(f"insert into users(email,pass_word,role) values('{email}','{passhash}','{role}')")
         row = db.execute(f"Select email from users where email='{email}'")
         print(row)
+        row = db.execute(f"Select * from users where email='{email}'")
+        session["user_id"] = row[0]["id"]
+        session["user_email"] = row[0]["email"]
         return redirect("/userdashboard")
 # @app.route('/login.html')
 # def login():
@@ -60,3 +63,33 @@ def login_post():
                 return apology("invalid email or password")
         else:
             return apology("invalid email or password")
+        return redirect("/userdashboard")
+
+
+@app.route("/apply", methods=["GET", "POST"])
+def apply():
+    """User apply"""
+    if request.method=='GET':
+        return render_template("apply.html")
+    if request.method=='POST':
+        amount=int(request.form.get("amount"))
+        tenor=request.form.get("tenor")
+        email = session["user_email"]
+        user_id = session["user_id"]
+        balance = -(amount)
+        interest = amount * (10 / 100)
+        installment = (amount + interest) / tenor
+
+        if not amount or not tenor:
+            return apology("please provide amount and tenor")
+        if amount < 5000:
+            return apology("yu cannot borrow less than 5000")
+        user = db.execute(f"SELECT * FROM users WHERE email= {email}")
+        if user[0]["bvn"] == None:
+            return redirect("editprofile.html")
+        elif user[0]["cbalance"] < 0:
+            return apology("please pay up your outstanding loan")
+        else:
+            db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUE('{user_id}', '{amount}', 'pending', '{tenor}', '{installment}', '{balance}', 0)")
+        row = db.execute(f"SELECT * FROM loans WHERE user_id= {user_id}")
+        return render_template("userdashboard.html", row)
