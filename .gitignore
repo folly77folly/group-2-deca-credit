@@ -55,6 +55,7 @@ coverage.xml
 *.log
 local_settings.py
 db.sqlite3
+credit.db
 
 # Flask stuff:
 instance/
@@ -89,6 +90,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+decacredit/
+.vscode/
 
 # Spyder project settings
 .spyderproject
