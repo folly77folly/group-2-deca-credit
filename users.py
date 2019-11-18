@@ -93,3 +93,10 @@ def apply():
             db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUE('{user_id}', '{amount}', 'pending', '{tenor}', '{installment}', '{balance}', 0)")
         row = db.execute(f"SELECT * FROM loans WHERE user_id= {user_id}")
         return render_template("userdashboard.html", row)
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect("/")
