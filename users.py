@@ -55,8 +55,16 @@ def login_post():
             if check_password_hash(user[0]["pass_word"], password):
                 session['user_id'] = user[0]['id']
                 session['user_email'] = user[0]['email']
+                print(session['user_email'])
                 return redirect('/')
             else:
                 return apology("invalid email or password")
         else:
             return apology("invalid email or password")
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect("/")
