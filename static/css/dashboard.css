@@ -1,0 +1,130 @@
+.body{
+    background-image: url('../images/dash1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+   }
+   .diff::after{
+    content:'';
+    background-image: url('../images/dash2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display:block;
+    filter: blur(10px);
+    -webkit-filter: blur(10px);
+    height: 100vh;
+   
+   }
+   .content{
+     position: absolute;
+     z-index: 1;
+   }
+   table{ 
+    margin-left: 30vh;
+   }
+  img{
+   height: 60px;
+   width: 180px;
+  }
+  .nav-wraper{
+   background-color: #2274F0;
+   margin-bottom: 0px;
+  }
+  i.material-icons{
+   color: #2274F0;
+  }
+  .menu{
+      background-color: white;
+      margin-left: 20px;
+      margin-top: 5px;
+  }
+  .background{
+   background-image: url('../images/dash3.jpg');
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+  }
+  .apply{
+    min-height: 60vh;
+    opacity: 0.9;
+    width: 80vh;
+    border-radius: 20px;
+    background-color: white;
+    margin-top: 3vh;
+    margin-left: 30vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 20px
+   }
+   .input-field :focus + label {
+    color: #2274F0 !important;
+   }
+   .input-field :focus {
+    border-bottom: 1px solid #2274F0 !important;
+    box-shadow: 0 1px 0 0 #2274F0 !important;
+   }
+   .btn-large{
+    margin-top: 20px;
+    border-radius: 20px;
+    background-color: #2274F0
+   }
+   .btn-large:hover{
+    color: #2274F0;
+    background-color: white
+   }
+   .btn{
+    margin-top: 20px;
+    border-radius: 20px;
+    background-color: #2274F0
+   }
+   .btn:hover{
+    color: #2274F0;
+    background-color: white
+   }
+   .highlight{
+    width: 80vh;
+    border-radius: 20px;
+    background-color: white;
+    margin-top: 3vh;
+    margin-left: 30vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 20px
+   }
+   .blue-text{
+    margin-left: 90px;
+   }
+   .col > div{
+     background-color: white;
+     height: 150px;
+     opacity: 0.9;
+     margin-bottom: 10px;
+     text-align: center;
+     justify-content: center;
+     justify-items: center;
+     color: #2274F0
+   }
+   .col > div:hover{
+    background-color: whitesmoke;
+    opacity: 0.7;
+  }
+   .row{
+    margin-left: 20vh;
+    margin-top: 10vh;
+   }
+   tbody{
+     background-color: white;
+     color:black;
+     opacity: 0.7;
+   }
+   thead{
+     background-color: #2274F0;
+     color: white;
+   }
+   span{
+       margin-top: 50px;
+   }
