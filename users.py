@@ -10,7 +10,7 @@ from .helpers import apology
 def hello():
     return render_template("index.html")
 
-@app.route("/register.html", methods=["GET", "POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
     if request.method=='GET':
@@ -41,9 +41,10 @@ def register():
 # def login():
 #     return render_template('login.html')
 
-@app.route('/login.html', methods=['POST', 'GET'])
-
+@app.route('/login', methods=['POST', 'GET'])
 def login_post():
+    if request.method=="GET":
+        return render_template("login.html")
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -59,5 +60,3 @@ def login_post():
                 return apology("invalid email or password")
         else:
             return apology("invalid email or password")
-    else:
-        return render_template('login.html')
