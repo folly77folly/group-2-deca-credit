@@ -4,7 +4,7 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from . import app,db
 from .helpers import apology
-
+from .api import callbanks
 
 @app.route("/")
 def hello():
@@ -92,7 +92,7 @@ def apply():
         else:
             db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUE('{user_id}', '{amount}', 'pending', '{tenor}', '{installment}', '{balance}', 0)")
         row = db.execute(f"SELECT * FROM loans WHERE user_id= {user_id}")
-        return render_template("userdashboard.html", row)
+        return render_template("userdashboard.html", row = row)
 
 @app.route("/logout")
 def logout():
@@ -100,3 +100,49 @@ def logout():
     session.clear()
 
     return redirect("/")
+
+@app.route("/edit", methods=["GET", "POST"])
+def edit_profile():
+    """Edit  user Profile"""
+    #check for session
+    sess_id=session["user_id"]
+    if not check_session(sess_id):
+        return redirect("/")
+    if request.method=='GET':
+        rows = db.execute(f"select * from users where id = '{sess_id}'")
+        lsofbanks=callbanks()
+        if lsofbanks:
+            return render_template("editprofile.html",details=rows,banks=lsofbanks)
+        return render_template("editprofile.html",details=rows)
+    if request.method=='POST':
+        acctno=request.form.get("acctno").strip()
+        bvn=request.form.get("bvn").strip()
+        cbalance=request.form.get("cbalance").strip()
+
+        first_name=request.form.get("first_name").strip()
+        last_name=request.form.get("last_name").strip()
+        phone=request.form.get("phone").strip()
+        bank_name=request.form.get("bank_name").strip()
+
+        identification=request.form.get("identification").strip()
+        address=request.form.get("address").strip()
+        nxtofkin=request.form.get("nxtofkin").strip()
+
+        nxtofkin_phone=request.form.get("nxtofkin_phone").strip()
+
+        if not acctno or not bvn:
+            message="You Must Fill your Account Number and BVN Details"
+            return apology(message)
+        rows=db.execute(f"Update users set acctno='{acctno}', bvn='{bvn}',first_name='{first_name}',last_name='{last_name}',\
+                phone='{phone}',bank_name='{bank_name}', identification='{identification}',address='{address}',nxtofkin='{nxtofkin}',\
+                nxtofkin_phone='{nxtofkin_phone}' where id='{sess_id}'")
+        flash("User Records Updated")
+        return redirect("/userdashboard")
+
+def check_session(sess_id):
+    user_id=sess_id
+    rusers=db.execute(f"select * from users where id ='{user_id}'")
+    if rusers:
+        return True
+    else:
+        return False
