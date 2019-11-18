@@ -18,7 +18,7 @@
  <div class="container">
   <div class="row">
    <div class="background z-depth-4">
-      <form>
+      <form action="/register", method="POST">
           <h3>Sign Up</h3>
           <div class="error red-text"></div>
            <div class="input-field">
@@ -34,8 +34,8 @@
              </div>
              <div class="input-field">
                 <i class="material-icons prefix">vpn_key</i>
-                <input type="password" name="password" id="password" class="validate" required="" aria-required="true">
-                <label for="password">Confirm password</label>
+                <input type="password" name="confirmpassword" id="confirmpassword" class="validate" required="" aria-required="true">
+                <label for="confirmpassword">Confirm password</label>
                </div>
               <input type="submit" class="btn-large" value="Signup">
               <p>already have an account? <a href="signin.html">Signin</a> </p>
