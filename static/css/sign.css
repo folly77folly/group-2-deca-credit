@@ -1,0 +1,59 @@
+body{
+    background-image: url('../images/sign.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+   }
+   .background{
+    min-height: 80vh;
+    opacity: 0.9;
+    width: 80vh;
+    border-radius: 20px;
+    background-color: white;
+    margin-top: 10vh;
+    margin-left: 30vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 15px 15px
+   }
+   .background1{
+    min-height: 60vh;
+    opacity: 0.9;
+    width: 80vh;
+    border-radius: 20px;
+    background-color: white;
+    margin-top: 10vh;
+    margin-left: 30vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 20px
+   }
+   .btn-large{
+    border-radius: 20px;
+    background-color: #2274F0
+   }
+   .btn-large:hover{
+    color: #2274F0;
+    background-color: white
+   }
+   .input-field :focus + label {
+    color: #2274F0 !important;
+   }
+   .input-field :focus {
+    border-bottom: 1px solid #2274F0 !important;
+    box-shadow: 0 1px 0 0 #2274F0 !important;
+   }
+   .input-field .prefix.active {
+    color: #2274F0;
+   }
+   .logog{
+    height: 60px;
+    width: 180px;
+   }
+   .nav-wraper{
+    background-color: #2274F0;
+    margin-bottom: 0px;
+   }
