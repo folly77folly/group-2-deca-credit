@@ -31,8 +31,9 @@ def register():
             return apology(message)
             # Query database for email
         passhash=generate_password_hash(passw)
+        role=0
         # db.execute(f"insert into users(email,pass_word) values({email},{passhash})")
-        db.execute(f"insert into users(email,pass_word) values('{email}','{passhash}')")
+        db.execute(f"insert into users(email,pass_word,role) values('{email}','{passhash}','{role}')")
         row = db.execute(f"Select email from users where email='{email}'")
         print(row)
         return redirect("/userdashboard")
