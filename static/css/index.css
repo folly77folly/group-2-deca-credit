@@ -1,0 +1,52 @@
+body{
+    margin:0;
+    font-family: Arial,"Helvetica Nueu", Helvetica, sans-serif;
+    font-size: 17px;
+    color: white
+   }
+   .btn-large{
+    border-radius: 10px;
+    background-color: #2274F0
+   }
+   .btn-large:hover{
+    color: #2274F0;
+    background-color: white
+   }
+   .nav-wraper{
+    background-color: #2274F0;
+    margin-bottom: 0px;
+   }
+   img{
+    height: 60px;
+    width: 180px;
+   }
+   header{
+    background-image: url("../images/landing1.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+   }
+   .background{
+    margin-top: 25vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    color: black
+   }
+   .background p{
+    font-size: 20px;
+   }
+   .input-field{
+    color: #2274F0;
+   }
+   #signup{
+   border-radius: 10px;
+   color:#2274F0;
+   background-color: whitesmoke;
+   min-height: 70vh;
+   opacity: 0.9;
+   }
