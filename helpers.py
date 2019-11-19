@@ -4,6 +4,8 @@ import urllib.parse
 
 from flask import redirect, render_template, request, session
 from functools import wraps
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 
 def apology(message, code=400):
@@ -61,3 +63,20 @@ def lookup(symbol):
 def naira(value):
     """Format value as Naira."""
     return f"=N={value:,.2f}"
+
+# Function to send mails
+def send_mail(to, subject, message):
+    message = Mail(
+        from_email='loanapproved@decacredit.com.ng',
+        to_emails=to,
+        subject=subject,
+        html_content=message or '<strong>and easy to do anywhere, even with Python</strong>')
+    try:
+        sg = SendGridAPIClient('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')
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(str(e))
+    #pass

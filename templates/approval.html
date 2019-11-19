@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>Quick Credit</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+ <link href="../static/css/icon.css" rel="stylesheet">
+ <link rel="stylesheet" href="../static/css/index.css">
+</head>
+<body>
+ <header>
+  <nav class="nav-wraper">
+   <div class="container">
+    <a href="index.html" class="brand-logo"><Deca-Credit></a>
+    <a href="#" class="sidenav-trigger" data-target="mobile-links">
+      <i class="material-icons">menu</i>
+    </a>    
+    <ul class="right hide-on-med-and-down">
+     <li><a href="#about">About</a></li>
+     <li><a href="#contact">Contact</a></li>
+     <li><a href="register.html">Sign Up</a></li>
+     <li><a href="login.html">Login</a></li>
+    </ul>
+   </div>
+  </nav>
+  <ul class="sidenav" id="mobile-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="register.html">Sign Up</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
+  <div class="background">
+    <h1>Welcome to Quick-Credit</h1>
+    <p>click the button below and get access to unlimited loan amount</p>
+    <a href="/register" class=" btn-large modal-trigger">Get Started</a><br>
+    </div>
+  </div>
+ </header>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+ <script>
+    $(document).ready(function(){
+     $('.sidenav').sidenav()
+     $('.modal').modal();
+    })
+    </script>
+    <div class="col-6">
+      <input type="text" value='{{userdetails["first_name"]}}'>
+    </div>
+    <div class="col-6">
+      <input type="text" value='{{userdetails["last_name"]}}'>
+    </div>    
+    <div class="col-6">
+      <input type="text" value='{{userdetails["phone"]}}'>
+    </div>     
+    <div class="col-6">
+      <input type="text" value='{{userdetails["acctno"]}}'>
+    </div>     
+    <div class="col-6">
+      <input type="text" value='{{userdetails["bvn"]}}'>
+    </div>     
+    <div class="col-6">
+      <input type="text" value='{{userdetails["bank_name"]}}'>
+    </div> 
+    
+    <div class="col-6">
+      <input type="text" value='{{bvndetails[0]}}'>
+    </div>
+    <div class="col-6">
+      <input type="text" value='{{bvndetails[1]}}'>
+    </div>    
+    <div class="col-6">
+      <input type="text" value='{{bvndetails[2]}}'>
+    </div>
+    <div class="col-6">
+      <input type="text" value='{{bvndetails[3]}}'>
+    </div>    
+ </body>
+</html>
