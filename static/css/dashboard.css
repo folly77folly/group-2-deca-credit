@@ -128,3 +128,6 @@
    span{
        margin-top: 50px;
    }
+   .input-field .prefix.active {
+    color: #2274F0;
+   }

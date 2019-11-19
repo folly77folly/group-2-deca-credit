@@ -57,7 +57,7 @@ def loan_approval(uid):
         return redirect("/userdashboard")
 
 @app.route("/outstanding")
-def apply():
+def outstanding():
     """admin view oustanding loan"""
     status = "active"
     repaid = 0

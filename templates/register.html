@@ -18,6 +18,11 @@
  <div class="container">
   <div class="row">
    <div class="background z-depth-4">
+        {% extends "layout.html" %}
+        {% block body %}
+        {% if error %}
+      <p class=error><strong>Message</strong> {{ error }}
+      {% endif %}
       <form action="/register", method="POST">
           <h3>Sign Up</h3>
           <div class="error red-text"></div>
@@ -38,7 +43,7 @@
                 <label for="confirmpassword">Confirm password</label>
                </div>
               <input type="submit" class="btn-large" value="Signup">
-              <p>already have an account? <a href="signin.html">Signin</a> </p>
+              <p>already have an account? <a href="login.html">Signin</a> </p>
                </form>
               </div>
    </div>
@@ -47,3 +52,5 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
+
+{% endblock %}

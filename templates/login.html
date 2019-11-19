@@ -20,6 +20,10 @@
    <div class="background1 z-depth-4">
       <form action="/login", method="POST">
           <h3>Sign In</h3>
+          {% block body %}
+          {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+        {% endif %}
           <div class="error red-text"></div>
            <div class="input-field">
             <i class="material-icons prefix">email</i>
@@ -33,7 +37,7 @@
               <label for="password">password</label>
              </div>
                <input type="submit" class="btn-large" value="login">
-              <p>Dont't have an account? <a class="signin" href="signup.html">Signup</a> </p>
+              <p>Dont't have an account? <a class="signin" href="register.html">Signup</a> </p>
               </form>
               </div>
    </div>
@@ -42,3 +46,4 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
+{% endblock %}
