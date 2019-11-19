@@ -115,7 +115,6 @@ def edit_profile():
             return render_template("editprofile.html",details=rows,banks=lsofbanks)
         return render_template("editprofile.html",details=rows)
     if request.method=='POST':
-        acctno=request.form.get("acctno").strip()
         bvn=request.form.get("bvn").strip()
         cbalance=request.form.get("cbalance").strip()
 
