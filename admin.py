@@ -69,3 +69,8 @@ def pending():
     status = "pending"
     pending = db.execute(f"SELECT * FROM loan WHERE status = '{status}'")
     return render_template("request.html", pending=pending)
+@app.route('/loans')
+def loan():
+    amt = 1
+    loans = db.execute(f"SELECT * FROM loan WHERE repaid = '{amt}'")
+    return render_template("loan.html", loans = loans)
