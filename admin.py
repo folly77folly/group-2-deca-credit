@@ -4,7 +4,7 @@ from flask_session import Session
 from . import app,db
 
 @app.route("/outstanding")
-def apply():
+def outstanding():
     """admin view oustanding loan"""
     status = "active"
     repaid = 0

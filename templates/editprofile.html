@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>Apply</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+ <link href="../static/css/icon.css" rel="stylesheet">
+ <link rel="stylesheet" href="../static/css/dashboard.css">
+</head>
+<header>
+  <nav class="nav-wraper">
+   <div class="container">
+    <a href="index.html" class="brand-logo"><img src="img/logo.png" alt=""></a>
+    </a>    
+    <ul class="right hide-on-med-and-down">
+     <li><a href="index.html">Home</a></li>
+     <li><a class="out" href="/logout">Logout</a></li>
+     <li><a href="#" class="btn-floating white">
+       <i class="material-icons">person</i>
+     </a></li>
+     <span class="user">{{email}}</span>
+    </ul>
+   </div>
+  </nav>
+  <ul id="slide-out" class="sidenav">
+        <li><div class="user-view">
+            <div class="background">
+            </div>
+            <a href="#email"><span class="white-text email">{{email}}</span></a>
+          </div></li>
+    <li><a href="dashboard.html">dashboard</a></li>
+    <li><a href="/apply">Apply for Loan</a></li>
+    <li><a href="#">Edit Profile</a></li>
+  </ul>
+  <a href="#" data-target="slide-out" class="sidenav-trigger">
+      <i class="material-icons">menu</i>
+  </a>
+  <div class="container">
+    <div class="row">
+     <div class="apply z-depth-4">
+        <form>
+            <h4>Loan Application</h4>
+            <div class="error red-text"></div>
+            <div class="success green-text"></div>
+            <div class="input-field">
+            {% if details[0]['acctno'] %}
+            <i class="tiny material-icons prefix">account_balance</i>
+            <input id =acctno autocomplete="off" class="validate" required="" aria-required="true" name="acctno" value="{{ details[0]['acctno'] }} " type="text" required>
+            <label for="acctno">Account Number</label>
+        </div>
+            {% else %}
+            <i class="small material-icons prefix">account_balance</i>
+            <input autocomplete="off" class="validate" required="" aria-required="true" name="acctno" id="acctno" type="text" required>
+            <label for="acctno">Account Number</label>
+            {% endif %}
+            </div>
+            <div class="input-field">
+            {% if details[0]['bvn'] %}
+            <i class="material-icons prefix">vpn_key</i>
+            <input class="validate" required="" aria-required="true" name="bvn" id="bvn" type="text" value="{{ details[0]['bvn'] }} " required>
+            <label for="bvn">Bvn</label>
+            {% else %}
+            <i class="material-icons prefix">vpn_key</i>
+            <input class="validate" required="" aria-required="true" name="bvn" id="bvn" type="text" required>
+            <label for="bvn">Bvn</label>
+            {% endif %}
+            <div class="input-field">
+            {% if details[0]['first_name'] %}
+            <i class="material-icons prefix">person</i>
+            <input class="validate" required="" aria-required="true" name="first_name" id="first_name" type="text" value="{{ details[0]['first_name'] }} " required>
+            <label for="first_name">First Name</label>
+            {% else %}
+            <i class="material-icons prefix">person</i>
+            <input class="validate" required="" aria-required="true" name="first_name" id="first_name" type="text" required>
+            <label for="first_name">First Name</label>
+            {% endif %}
+        </div>
+            <div class="input-field">
+            {% if details[0]['last_name'] %}
+            <i class="material-icons prefix">person</i>
+            <input class="validate" required="" aria-required="true" name="last_name" id="last_name" type="text" value="{{ details[0]['last_name'] }} " required>
+            <label for="last_name">Last Name</label>
+            {% else %}
+            <i class="material-icons prefix">person</i>
+            <input class="validate" required="" aria-required="true" name="last_name" id="last_name" type="text" required>
+            <label for="last_name">Last Name</label>
+            {% endif %}
+        </div>
+            <div class="input-field">
+            {% if details[0]['phone'] %}
+            <i class="material-icons prefix">phone</i>
+            <input class="validate" required="" aria-required="true" name="phone" id="phone" type="text" value="{{ details[0]['phone'] }} "required>
+            <label for="phone">Phone Number</label>
+            {% else %}
+            <i class="material-icons prefix">phone</i>
+            <input class="validate" required="" aria-required="true" name="phone" id="phone" type="text" required>
+            <label for="phone">Phone Number</label>
+            {% endif %}
+        </div>
+            <div class="input-field">
+            {% if details[0]['address'] %}
+            <i class="material-icons prefix">house</i>
+            <input class="validate" required="" aria-required="true" name="address" id="address" type="text"  value="{{ details[0]['address'] }} "required>
+            <label for="address">Address</label>
+            {% else %}
+            <i class="material-icons prefix">house</i>
+            <input class="validate" required="" aria-required="true" name="address" id="address" type="text" required>
+            <label for="address">Address</label>
+            {% endif %}
+        </div>
+            <div class="input-field">
+            {% if details[0]['nxtofkin'] %}
+            <i class="material-icons prefix">person</i>
+            <input class="validate" required="" aria-required="true" name="nxtofkin" id="nxtofkin" type="text" value="{{ details[0]['nxtofkin'] }} "required>
+            <label for="nxtofkin">Next of kin</label>
+            {% else %}
+            <i class="material-icons prefix">person</i>
+            <input class="validate" required="" aria-required="true" name="nxtofkin" id="nxtofkin" type="text" required>
+            <label for="nxtofkin">Next of kin</label>
+            {% endif %}
+        </div>
+            <div class="input-field">
+            {% if details[0]['nxtofkin_phone'] %}
+            <i class="material-icons prefix">phone</i>
+            <input class="validate" required="" aria-required="true" name="nxtofkin_phone" id="nxtofkin_phone" type="text" value="{{ details[0]['nxtofkin_phone'] }} "required>
+            <label for="nxtofkin_phone">Next of kin phone-number</label>
+            {% else %}
+            <i class="material-icons prefix">phone</i>
+            <input class="validate" required="" aria-required="true" name="nxtofkin_phone" id="nxtofkin_phone" type="text" required>
+            <label for="nxtofkin_phone">Next of kin phone-number</label>
+            {% endif %}
+        </div>
+              <select id="bank_nam" class="browser-default tenor">
+                {% if details[0]['bank_name'] %}
+                    <option value="{{ details[0]['bank_name'] }}">{{ details[0]['bank_name'] }}</option>
+                    {% for bank in banks %}
+                    <option value="{{ bank }}">{{ bank }}</option>
+                    {% endfor %}                    
+                {% else %}
+                    {% for bank in banks %}
+                    <option value="{{ bank }}">{{ bank }}</option>
+                    {% endfor %}
+                {% endif %}
+              </select>
+              <a href="#" class="btn-large submit">Update</a>
+                 </form>
+                </div>
+     </div>
+    </div>
+   </div>
+<body class="body">
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+  $(document).ready(function(){
+   $('.sidenav').sidenav()
+  })
+  </script>
+</body>
+</html>

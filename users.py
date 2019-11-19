@@ -10,44 +10,45 @@ from .api import callbanks
 def hello():
     return render_template("index.html")
 
-@app.route("/register.html", methods=["GET", "POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-    if request.method=='GET':
-        return render_template("register.html")
+    error = None
     if request.method=='POST':
         email=request.form.get("email")
         passw=request.form.get("password")
         cpassw=request.form.get("confirmpassword")
         user_name=db.execute(f"Select email from users where email='{email}'")
         if user_name:
-            message="email Already Taken"
-            return apology(message)
+            error = "email Already Taken"
+            return render_template("register.html", error = error)
         if email=="" or passw=="" or cpassw=="":
-            message="email or Password or Confrim Password Cannot be Empty"
-            return apology("message")
+            error="email or Password or Confrim Password Cannot be Empty"
+            return render_template("register.html", error = error)
+
         if passw!=cpassw:
-            message="Password Mismatch"
-            return apology(message)
+            error="Password Mismatch"
+            return render_template("register.html", error = error)
+
             # Query database for email
         passhash=generate_password_hash(passw)
         role=0
         # db.execute(f"insert into users(email,pass_word) values({email},{passhash})")
         db.execute(f"insert into users(email,pass_word,role) values('{email}','{passhash}','{role}')")
         row = db.execute(f"Select email from users where email='{email}'")
-        print(row)
         row = db.execute(f"Select * from users where email='{email}'")
         session["user_id"] = row[0]["id"]
         session["user_email"] = row[0]["email"]
-        return redirect("/userdashboard")
+        flash('You were successfully logged in')
+        return redirect("dashboard.html",email= session["user_email"] )
+    return render_template("register.html")
 # @app.route('/login.html')
 # def login():
 #     return render_template('login.html')
 
 @app.route('/login', methods=['POST', 'GET'])
 def login_post():
-    if request.method=="GET":
-        return render_template("login.html")
+    error = None
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -58,41 +59,51 @@ def login_post():
             if check_password_hash(user[0]["pass_word"], password):
                 session['user_id'] = user[0]['id']
                 session['user_email'] = user[0]['email']
-                return redirect('/')
+                return render_template('dashboard.html', email= session["user_email"])
             else:
-                return apology("invalid email or password")
+                error = "invalid email or password"
+                return render_template("register.html", error = error)
         else:
-            return apology("invalid email or password")
-        return redirect("/userdashboard")
+            error = "invalid email or password"
+            return render_template("register.html", error = error)
+        if user[0]["role"] == 1:
+            return redirect("admin.html", email= session["user_email"])
+        else:
+            return redirect("dashboard.html", email= session["user_email"])
+    return render_template("login.html")
 
 
 @app.route("/apply", methods=["GET", "POST"])
 def apply():
     """User apply"""
-    if request.method=='GET':
-        return render_template("apply.html")
+    error = None
     if request.method=='POST':
-        amount=int(request.form.get("amount"))
-        tenor=request.form.get("tenor")
-        email = session["user_email"]
         user_id = session["user_id"]
+        user_balance = db.execute(f"SELECT * FROM users WHERE id= '{user_id}'")
+        balance = user_balance[0]["cbalance"]
+        if not request.form.get("amount") or not request.form.get("tenor"):
+            error = "please provide amount and tenor"
+            return render_template("apply.html", error = error)
+        amount=int(request.form.get("amount"))
+        tenor=int(request.form.get("tenor"))
+        email = session["user_email"]
         interest = amount * (10 / 100)
         installment = (amount + interest) / tenor
-        user_balance = db.execute(f"SELECT * FROM users WHERE id= '{user_id}'")
-        balance = user_balance["cbalance"]
-        if not amount or not tenor:
-            return apology("please provide amount and tenor")
         if amount < 5000:
-            return apology("yu cannot borrow less than 5000")
-        user = db.execute(f"SELECT * FROM users WHERE email= {email}")
+            error = "you cannot borrow less than 5000"
+            return render_template("apply.html", error = error)
+        user = db.execute(f"SELECT * FROM users WHERE email= '{email}'")
         if user[0]["bvn"] == None:
-            return redirect("editprofile.html")
+            flash("please update your profile")
+            return redirect("/edit")
         elif user[0]["cbalance"] < 0:
-            return apology("please pay up your outstanding loan")
+            error = "please pay up your outstanding loan"
+            return render_template("apply.html", error = error)
         else:
             db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUE('{user_id}', '{amount}', 'pending', '{tenor}', '{installment}', '{balance}', 0)")
         row = db.execute(f"SELECT * FROM loans WHERE user_id= '{user_id}'")
-        return render_template("userdashboard.html", row = row)
+        return render_template("dashboard.html", row = row)
+    return render_template("apply.html")
 
 @app.route("/logout")
 def logout():
@@ -112,8 +123,8 @@ def edit_profile():
         rows = db.execute(f"select * from users where id = '{sess_id}'")
         lsofbanks=callbanks()
         if lsofbanks:
-            return render_template("editprofile.html",details=rows,banks=lsofbanks)
-        return render_template("editprofile.html",details=rows)
+            return render_template("editprofile.html",details=rows,banks=lsofbanks, email= session["user_email"] )
+        return render_template("editprofile.html",details=rows, email= session["user_email"])
     if request.method=='POST':
         acctno=request.form.get("acctno").strip()
         bvn=request.form.get("bvn").strip()
@@ -137,7 +148,7 @@ def edit_profile():
                 phone='{phone}',bank_name='{bank_name}', identification='{identification}',address='{address}',nxtofkin='{nxtofkin}',\
                 nxtofkin_phone='{nxtofkin_phone}' where id='{sess_id}'")
         flash("User Records Updated")
-        return redirect("/userdashboard")
+        return redirect("dashboard.html", email= session["user_email"])
 
 def check_session(sess_id):
     user_id=sess_id
