@@ -76,10 +76,10 @@ def apply():
         tenor=request.form.get("tenor")
         email = session["user_email"]
         user_id = session["user_id"]
-        balance = -(amount)
         interest = amount * (10 / 100)
         installment = (amount + interest) / tenor
-
+        user_balance = db.execute(f"SELECT * FROM users WHERE id= '{user_id}'")
+        balance = user_balance["cbalance"]
         if not amount or not tenor:
             return apology("please provide amount and tenor")
         if amount < 5000:
@@ -91,7 +91,7 @@ def apply():
             return apology("please pay up your outstanding loan")
         else:
             db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUE('{user_id}', '{amount}', 'pending', '{tenor}', '{installment}', '{balance}', 0)")
-        row = db.execute(f"SELECT * FROM loans WHERE user_id= {user_id}")
+        row = db.execute(f"SELECT * FROM loans WHERE user_id= '{user_id}'")
         return render_template("userdashboard.html", row = row)
 
 @app.route("/logout")

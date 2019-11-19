@@ -55,3 +55,17 @@ def loan_approval(uid):
         ############################################################################################
         flash("User Records Updated")
         return redirect("/userdashboard")
+
+@app.route("/outstanding")
+def apply():
+    """admin view oustanding loan"""
+    status = "active"
+    repaid = 0
+    outstanding = db.execute(f"SELECT * FROM loans WHERE status = '{status}' AND repaid = '{repaid}'")
+    return render_template("outstanding.html", oustanding = outstanding)
+
+@app.route('/request')
+def pending():
+    status = "pending"
+    pending = db.execute(f"SELECT * FROM loan WHERE status = '{status}'")
+    return render_template("request.html", pending=pending)
