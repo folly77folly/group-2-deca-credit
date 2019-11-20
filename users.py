@@ -3,7 +3,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 # from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from . import app,db
-from .helpers import apology
+from .helpers import apology, send_mail
 from .api import callbanks
 
 @app.route("/")
@@ -186,3 +186,45 @@ def custrole():
 @app.errorhandler(404)
 def pagenotfound(error):
     return render_template('index.html',error='404: it appears you have error')
+
+
+@app.route('/loanrepayment',methods=['POST'])
+def loanrepayment():
+    """loan repayment by user"""
+    # collecting values 
+    user_id=session.get('user_id')
+    loanrepay=float(request.form.get('amount'))
+    #user records
+    userrow=db.execute(f"Select * from users where id='{user_id}'")
+    surname=userrow[0]["last_name"]
+    firstname=userrow[0]["first_name"]
+    email=userrow[0]["email"]
+    fullname=surname +' '+ firstname
+    #loan records
+    loanrow=db.execute(f"Select * from loans where user_id='{user_id}' and status='approved' and repaid='0'")
+    loan_id=loanrow[0]["id"]
+    balance=float(userrow[0]["cbalance"])
+    repaid=0
+    print(balance)
+    print(loanrepay)
+    newbalance=balance+loanrepay
+    description="Loan Repayment using paystack"
+    debit=0
+    credit=loanrepay
+
+    if newbalance>= 0:
+        repaid=1
+    db.execute(f"update users set cbalance='{newbalance}' where id='{user_id}'")
+    db.execute(f"update loans set balance='{newbalance}', repaid='{repaid}' where id='{user_id}'")
+    db.execute(f"insert into tnxledger(user_id,loan_id,description,debit,credit,approved_by)values('{user_id}','{loan_id}','{description}','{debit}','{credit}','{user_id}')")
+    
+    #Compling Mail
+
+    subject="Loan Rejected !!!"
+    message=f"<h3>Dear {fullname},</h3><br>\
+    <b>This is to inform you that a loan has been repaid </b>\
+    <p>for more info contact Management on <a href='#'>08030785155</a> </p>\
+    <p>Click on the <a href='#'>Link</a> to login</p>"
+
+    send_mail(email,subject,message)
+    return json.dumps({'paid':'2'})
