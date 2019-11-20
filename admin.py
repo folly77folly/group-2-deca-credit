@@ -21,7 +21,7 @@ def loan_approval(uid):
         userdetails = db.execute(f"SELECT * FROM users WHERE id= '{user_id}'")
         bvn=userdetails[0]["bvn"]
         bvndetails=verifybvn(bvn)
-        return render_template("approval.html",userdetails=userdetails[0],bvndetails=bvndetails, loan=loan[0])
+        return render_template("approval.html",userdetails=userdetails[0],bvndetails=bvndetails, loan=loan[0] uid=uid)
     if request.method=='POST':
         loansrec=db.execute(f"select * from loans where id='{uid}' and status= 0")
         print(loansrec)
@@ -88,11 +88,18 @@ def rejectloan():
     print(u)
     db.execute(f"update loans set status= 2 where id='{u}'")
     return json.dumps({'rejected':'1'})
-
-
-# @app.route('/loans/<id>',methods=['POST', 'GET'])
-# def singleloan(id):
-#     user_id = loan[0]["user_id"]
-#     user = db.execute(f"SELECT * FROM users WHERE id= '{user_id}'")
-#     bvndetails = verifybvn(user[0]["bvn"])
-#     return render_template("loandetails.html", loan = loan, user = user, bvndetails=bvndetails)
+    user_id=session.get('user_id')
+    userrow=db.execute(f"Select * from users where id='{user_id}'")
+    surname=userrow[0]["last_name"]
+    firstname=userrow[0]["first_name"]
+    email=userrow[0]["email"]
+    fullname=surname +' '+ firstname
+    subject="Loan Rejected !!!"
+    message=f"<h3>Dear {fullname},</h3><br>\
+    <b>This is to inform you that your Loan has been Rejected by the Admin </b>\
+    <p>for more info contact Management on <a href='#'>08030785155</a> </p>\
+    <p>Click on the <a href='#'>Link</a> to login</p>"  
+    loanid=request.args.get('textstr')
+    db.execute(f"update loans set status= 2 where id='{loanid}'")
+    send_mail(email,subject,message)
+    return json.dumps({'rejected':'2'})
