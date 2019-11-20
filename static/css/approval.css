@@ -99,14 +99,15 @@
     margin-left: 90px;
    }
    .col > div{
-     background-color: white;
-     height: 150px;
-     opacity: 0.9;
-     margin-bottom: 10px;
-     text-align: center;
-     justify-content: center;
-     justify-items: center;
-     color: #2274F0
+    background-color: white;
+    height: 230px;
+    opacity: 0.9;
+    margin-bottom: 10px;
+    padding: 10px; 
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+    color: #2274F0
    }
    .col > div:hover{
     background-color: whitesmoke;
@@ -131,13 +132,5 @@
    .input-field .prefix.active {
     color: #2274F0;
    }
-   .details{
-    background-color: black;
-    height: 300px;
-    opacity: 0.9;
-    margin-bottom: 10px;
-    text-align: center;
-    justify-content: center;
-    justify-items: center;
-    color: #2274F0
-  }
+
+   

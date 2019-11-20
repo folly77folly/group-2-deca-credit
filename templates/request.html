@@ -45,17 +45,25 @@
   <table class="striped centered responsive-table white-text">
     <thead>
       <tr>
-          <th></th>
-          <th>requester</th>
+         
+          <th>loan id</th>
           <th>Amount</th>
           <th>Tenor</th>
-          <th>interest</th>
           <th>monthlyPayment</th>
           <th>Action</th>
       </tr>
     </thead>
 
     <tbody class="table">
+      {% for loan in pending %}
+      <tr>
+        <td>{{loan["id"]}}</td>
+        <td>{{loan["amount"]}}</td>
+        <td>{{loan["tenor"]}}</td>
+        <td>{{loan["installment"]}}</td>
+        <td><a href="{{ url_for('loan_approval',uid=loan.id) }}">View Details</a></td>
+      </tr>
+      {% endfor %}
     </tbody>
   </table>
  </div>

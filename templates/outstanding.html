@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>View Loans</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+ <link href="../static/css/icon.css" rel="stylesheet">
+ <link rel="stylesheet" href="../static/css/dashboard.css">
+</head>
+<header class="diff">
+  <nav class="nav-wraper">
+   <div class="container">
+    <a href="index.html" class="brand-logo"><img src="img/logo.png" alt=""></a>
+    </a>    
+    <ul class="right hide-on-med-and-down">
+     <li><a href="index.html">Home</a></li>
+     <li><a class="out" href="signin.html">Logout</a></li>
+     <li><a href="#" class="btn-floating white">
+       <i class="material-icons">person</i>
+     </a></li>
+     <span class="user">Welcome Name</span>
+    </ul>
+   </div>
+  </nav>
+  <ul id="slide-out" class="sidenav">
+        <li><div class="user-view">
+            <div class="background">
+            </div>
+            <a href="#user"><img class="circle" src="img/messi.jpeg"></a>
+            <a href="#name"><span class="white-text name">John Doe</span></a>
+            <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+          </div></li>    
+          <li><a href="./admin.html">dashboard</a></li>
+    <li><a href="./outstanding">View loan Request</a></li>
+    <li><a href="./allLoans">View all Loans</a></li>
+  </ul>
+  <div class="content">
+  <a href="#" data-target="slide-out" class="sidenav-trigger">
+      <i class="material-icons">menu</i>
+  </a>
+  <div class="container view">
+    <div class="error red-text"></div>
+  <table class="striped centered responsive-table white-text">
+    <thead>
+      <tr>
+         
+          <th>loan id</th>
+          <th>Amount</th>
+          <th>Tenor</th>
+          <th>Status</th>
+          <th>monthlyPayment</th>
+          <th>Balance</th>
+          <th>Repaid</th>
+      </tr>
+    </thead>
+
+    <tbody class="table">
+      {% for loan in outstanding %}
+      <tr>
+        <td>{{loan["id"]}}</td>
+        <td>{{loan["amount"]}}</td>
+        <td>{{loan["tenor"]}}</td>
+        <td>{{loan["stauts"]}}</td>
+        <td>{{loan["installment"]}}</td>
+        <td>{{loan["balance"]}}</td>
+        <td>False</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+ </div>
+</div>
+</header>
+<body>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+ $(document).ready(function(){
+   $('.sidenav').sidenav()
+  })
+</script>
+</body>
+</html>
