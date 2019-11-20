@@ -109,7 +109,7 @@ def apply():
 @app.route('/history')
 def history():
     user_id = session['user_id']
-    history = db.execute(f"SELECT * from loans WHERE user_id = {user_id}"))
+    history = db.execute(f"SELECT * from loans WHERE user_id = {user_id}")
     return render_template('history.html', history=history)
  
 
