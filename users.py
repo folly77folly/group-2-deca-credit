@@ -106,6 +106,14 @@ def apply():
         return render_template("index.html")
     return render_template("apply.html")
 
+@app.route('/history')
+def history():
+    user_id = session['user_id']
+    history = db.execute(f"SELECT * from loans WHERE user_id = {user_id}"))
+    return render_template('history.html', history=history)
+ 
+
+
 @app.route("/logout")
 def logout():
     userid=session.get('user_id')
