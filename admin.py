@@ -15,12 +15,13 @@ def loan_approval(uid):
     if request.method=='GET':
         if  check_session() is False:
             return redirect("/")
-        userrow=db.execute(f"select * from users where id={sess_id}")
-        userdetails=userrow[0]
-        bvn=userrow[0]["bvn"]
+        loanid = int(uid)
+        loan = db.execute(f"SELECT * FROM loans WHERE id= '{loanid}'")
+        user_id = loan[0]["user_id"]
+        userdetails = db.execute(f"SELECT * FROM users WHERE id= '{user_id}'")
+        bvn=userdetails[0]["bvn"]
         bvndetails=verifybvn(bvn)
-        print(bvndetails)
-        return render_template("approval.html",userdetails=userdetails,bvndetails=bvndetails,uid=uid)
+        return render_template("approval.html",userdetails=userdetails[0],bvndetails=bvndetails, loan=loan[0] uid=uid)
     if request.method=='POST':
         loansrec=db.execute(f"select * from loans where id='{uid}' and status= 0")
         print(loansrec)
@@ -60,7 +61,7 @@ def outstanding():
     """admin view oustanding loan"""
     if  check_session() is False:
         return redirect("/")
-    status = "active"
+    status = "pending"
     repaid = 0
     outstanding = db.execute(f"SELECT * FROM loans WHERE status = '{status}' AND repaid = '{repaid}'")
     return render_template("outstanding.html", oustanding = outstanding)
@@ -70,7 +71,7 @@ def pending():
     if  check_session() is False:
         return redirect("/")    
     status = "pending"
-    pending = db.execute(f"SELECT * FROM loan WHERE status = '{status}'")
+    pending = db.execute(f"SELECT * FROM loans WHERE status = '{status}'")
     return render_template("request.html", pending=pending)
 
 @app.route('/loans')
@@ -78,11 +79,15 @@ def loan():
     if  check_session() is False:
         return redirect("/")    
     amt = 1
-    loans = db.execute(f"SELECT * FROM loan WHERE repaid = '{amt}'")
+    loans = db.execute(f"SELECT * FROM loans WHERE repaid = '{amt}'")
     return render_template("loan.html", loans = loans)
 
 @app.route('/loan_reject',methods=['GET'])
 def rejectloan():
+    u=request.args.get('textstr')
+    print(u)
+    db.execute(f"update loans set status= 2 where id='{u}'")
+    return json.dumps({'rejected':'1'})
     user_id=session.get('user_id')
     userrow=db.execute(f"Select * from users where id='{user_id}'")
     surname=userrow[0]["last_name"]

@@ -58,6 +58,8 @@ def login_post():
                 session['user_id'] = user[0]['id']
                 session['user_email'] = user[0]['email']
                 session['user_role'] = user[0]['role']
+                if user[0]["role"] == 1:
+                    return render_template("admin.html", email= session["user_email"])
                 return render_template('dashboard.html', email= session["user_email"])
             else:
                 error = "invalid email or password"
@@ -87,6 +89,8 @@ def apply():
         tenor=int(request.form.get("tenor"))
         email = session["user_email"]
         interest = amount * (10 / 100)
+        status = "pending"
+        repaid = 0
         installment = (amount + interest) / tenor
         if amount < 5000:
             error = "you cannot borrow less than 5000"
@@ -99,7 +103,7 @@ def apply():
             error = "please pay up your outstanding loan"
             return render_template("apply.html", error = error)
         else:
-            db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUE('{user_id}', '{amount}', 'pending', '{tenor}', '{installment}', '{balance}', 0)")
+            db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUES('{user_id}', '{amount}', '{status}', '{tenor}', '{installment}', '{balance}', '{repaid}')")
         row = db.execute(f"SELECT * FROM loans WHERE user_id= '{user_id}'")
         return render_template("dashboard.html", row = row)
     if check_session() is False:
@@ -228,3 +232,15 @@ def loanrepayment():
 
     send_mail(email,subject,message)
     return json.dumps({'paid':'2'})
+  
+@app.route('/pay', methods=['GET'])
+def pay():
+    if request.method == 'GET':
+        repaid = 0
+        status = "approved"
+        user_id = session["user_id"]
+        row = db.execute(f"SELECT * FROM loans WHERE user_id='{user_id}' AND repaid='{repaid}' AND status='{status}'")
+        print(row)
+        if len(row):
+            return render_template("pay.html", row=row, email = session["user_email"])
+        return render_template("dashboard.html")
