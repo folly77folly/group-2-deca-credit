@@ -10,12 +10,11 @@ from .api import verifybvn
 @app.route("/approval/<uid>", methods=["GET", "POST"])
 def loan_approval(uid):
     """Approval for loan """
-    #check for session
-    # sess_id=session["user_id"]
-    sess_id=1
-    if not check_session(sess_id):
-        return redirect("/")
+    sess_id=session.get('user_id')
+    # sess_id=1
     if request.method=='GET':
+        if  check_session() is False:
+            return redirect("/")
         userrow=db.execute(f"select * from users where id={sess_id}")
         userdetails=userrow[0]
         bvn=userrow[0]["bvn"]
@@ -59,6 +58,8 @@ def loan_approval(uid):
 @app.route("/outstanding")
 def outstanding():
     """admin view oustanding loan"""
+    if  check_session() is False:
+        return redirect("/")
     status = "active"
     repaid = 0
     outstanding = db.execute(f"SELECT * FROM loans WHERE status = '{status}' AND repaid = '{repaid}'")
@@ -66,11 +67,16 @@ def outstanding():
 
 @app.route('/request')
 def pending():
+    if  check_session() is False:
+        return redirect("/")    
     status = "pending"
     pending = db.execute(f"SELECT * FROM loan WHERE status = '{status}'")
     return render_template("request.html", pending=pending)
+
 @app.route('/loans')
 def loan():
+    if  check_session() is False:
+        return redirect("/")    
     amt = 1
     loans = db.execute(f"SELECT * FROM loan WHERE repaid = '{amt}'")
     return render_template("loan.html", loans = loans)
@@ -78,7 +84,6 @@ def loan():
 @app.route('/loan_reject',methods=['GET'])
 def rejectloan():
     u=request.args.get('textstr')
-    print("u")
     print(u)
     db.execute(f"update loans set status= 2 where id='{u}'")
     return json.dumps({'rejected':'1'})
