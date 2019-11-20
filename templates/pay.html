@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>Apply</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+ <link href="../static/css/icon.css" rel="stylesheet">
+ <link rel="stylesheet" href="../static/css/dashboard.css">
+</head>
+<header>
+  <nav class="nav-wraper">
+   <div class="container">
+    <a href="/index" class="brand-logo"><img src="img/logo.png" alt=""></a>
+    </a>    
+    <ul class="right hide-on-med-and-down">
+     <li><a href="/index">Home</a></li>
+     <li><a class="out" href="/logout">Logout</a></li>
+     <li><a href="#" class="btn-floating white">
+       <i class="material-icons">person</i>
+     </a></li>
+     <span class="user">{{email}}</span>
+    </ul>
+   </div>
+  </nav>
+  <ul id="slide-out" class="sidenav">
+        <li><div class="user-view">
+            <div class="background">
+            </div>
+            <a href="#email"><span class="white-text email">{{email}}</span></a>
+          </div></li>
+    <li><a href="/dashboard">dashboard</a></li>
+    <li><a href="#">Apply for Loan</a></li>
+    <li><a href="/edit">Edit Profile</a></li>
+  </ul>
+  <a href="#" data-target="slide-out" class="sidenav-trigger">
+      <i class="material-icons">menu</i>
+  </a>
+  <div class="container">
+    <div class="row">
+     <div class="apply z-depth-4">
+        {% extends "layout.html" %}
+        {% block body %}
+        {% if error %}
+      <p class=error><strong>Error:</strong> {{ error }}
+      {% endif %}
+        <form action= "/apply", method="POST", id="repayment">
+            <h4>Loan Repayment</h4>
+            <div class="error red-text"></div>
+            <div class="success green-text"></div>
+
+            <div class="input-field">
+                <i class="tiny material-icons prefix">account_balance</i>
+                <input id =acctno autocomplete="off" class="validate" required="" aria-required="true" id="amount" name="amount" type="text" required>
+                <label for="acctno">Amount</label>
+            </div>
+
+            <div class="input-field">
+                <i class="tiny material-icons prefix">account_balance</i>
+                <input readonly id=acctno autocomplete="off" class="validate" required="" aria-required="true" id="email" value="{{ email }} " type="text" required>
+                <label for="acctno">Email</label>
+            </div>
+            <div class="input-field">
+            {% if row[0] %}
+            <i class="tiny material-icons prefix">account_balance</i>
+            <input readonly id =acctno autocomplete="off" class="validate" required="" aria-required="true" name="balance" value="{{ row[0]['balance'] }} " type="text" required>
+            <label for="acctno">Balance</label>
+            {% else %}
+            <i class="small material-icons prefix">account_balance</i>
+            <input readonly autocomplete="off" class="validate" required="" aria-required="true" name="balance" id="balance" type="text" required>
+            <label for="acctno">Balance</label>
+            {% endif %}
+            </div>
+            <div class="input-field">
+            {% if row[0] %}
+            <i class="material-icons prefix">account_balance</i>
+            <input readonly class="validate" required="" aria-required="true" type="text" value="{{ row[0]['installment'] }} " required>
+            <label for="bvn">Monthly Payment</label>
+            {% else %}
+            <i class="material-icons prefix">account_balance</i>
+            <input readonly class="validate" required="" aria-required="true" type="text" required>
+            <label for="bvn">Monthly Payment</label>
+            {% endif %}
+            </div>
+            <input type ="hidden" value="-50000" id ="loanbalance" name ="loanbalance">
+            <input type ="hidden" value="a@yahoo.com" id ="email" name ="email">
+              <input type="submit" class="btn-large" value="Pay">
+                 </form>
+                </div>
+     </div>
+    </div>
+   </div>
+<body class="body">
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+  $(document).ready(function(){
+   $('.sidenav').sidenav()
+  })
+  </script>
+</body>
+</html>
+{% endblock %}
