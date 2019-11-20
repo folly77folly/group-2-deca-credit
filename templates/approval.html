@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script type="text/javascript" src="{{ url_for('static',filename='myuser.js') }}"></script>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -10,26 +11,27 @@
  <link rel="stylesheet" href="../static/css/index.css">
 </head>
 <body>
+  <button type="button" onclick="doloanreject();">reject</button>
  <header>
   <nav class="nav-wraper">
    <div class="container">
-    <a href="index.html" class="brand-logo"><Deca-Credit></a>
+    <a href="/index" class="brand-logo"><Deca-Credit></a>
     <a href="#" class="sidenav-trigger" data-target="mobile-links">
       <i class="material-icons">menu</i>
     </a>    
     <ul class="right hide-on-med-and-down">
      <li><a href="#about">About</a></li>
      <li><a href="#contact">Contact</a></li>
-     <li><a href="register.html">Sign Up</a></li>
-     <li><a href="login.html">Login</a></li>
+     <li><a href="/register">Sign Up</a></li>
+     <li><a href="/login">Login</a></li>
     </ul>
    </div>
   </nav>
   <ul class="sidenav" id="mobile-links">
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="register.html">Sign Up</a></li>
-    <li><a href="login.html">Login</a></li>
+    <li><a href="/register">Sign Up</a></li>
+    <li><a href="/login">Login</a></li>
   </ul>
   <div class="background">
     <h1>Welcome to Quick-Credit</h1>
@@ -45,6 +47,7 @@
      $('.modal').modal();
     })
     </script>
+    <script type="text/javascript" src="{{ url_for('static',filename='myuser.js') }}"></script>
     <div class="col-6">
       <input type="text" value='{{userdetails["first_name"]}}'>
     </div>
@@ -67,7 +70,7 @@
     <div class="col-6">
       <input type="text" value='{{bvndetails[0]}}'>
     </div>
-    <div class="col-6">
+    <div class="col-6"></div>
       <input type="text" value='{{bvndetails[1]}}'>
     </div>    
     <div class="col-6">
@@ -77,4 +80,5 @@
       <input type="text" value='{{bvndetails[3]}}'>
     </div>    
  </body>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </html>

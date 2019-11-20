@@ -1,7 +1,7 @@
 from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session,json
-from flask_session import Session
-from tempfile import mkdtemp
+# from flask_session import Session
+# from tempfile import mkdtemp
 from flask_mail import Mail, Message
 from .helpers import send_mail
 
@@ -32,22 +32,22 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 # app.config['MAIL_PASSWORD']="omogbolahan417"
 # app.config['MAIL_DEFAULT_SENDER']="test email"
 # app.config['MAIL_ASCII_ATTACHEMENTS']=True
-# app.config['SECRET_KEY'] = '8989'
+app.config['SECRET_KEY'] = '8985435345359'
 
 
 
 # Ensure responses aren't cached
-@app.after_request
-def after_request(response):
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
+# @app.after_request
+# def after_request(response):
+#     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+#     response.headers["Expires"] = 0
+#     response.headers["Pragma"] = "no-cache"
+#     return response
 
-app.config["SESSION_FILE_DIR"] = mkdtemp()
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+# app.config["SESSION_FILE_DIR"] = mkdtemp()
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "filesystem"
+# # Session(app)
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///credit.db")
