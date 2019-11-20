@@ -1,13 +1,13 @@
 from cs50 import SQL
-from flask import Flask, flash, jsonify, redirect, render_template, request, session,json
-from flask_session import Session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session,json,url_for,abort,session
+# from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from . import app,db
 from .helpers import apology
 from .api import callbanks
 
 @app.route("/")
-def hello():
+def home():
     return render_template("index.html")
 
 @app.route("/register", methods=["GET", "POST"])
@@ -40,11 +40,9 @@ def register():
         session["user_id"] = row[0]["id"]
         session["user_email"] = row[0]["email"]
         flash('You were successfully logged in')
-        return redirect("dashboard.html",email= session["user_email"] )
+        return render_template("dashboard.html",email= session["user_email"] )
     return render_template("register.html")
-# @app.route('/login.html')
-# def login():
-#     return render_template('login.html')
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login_post():
@@ -59,6 +57,7 @@ def login_post():
             if check_password_hash(user[0]["pass_word"], password):
                 session['user_id'] = user[0]['id']
                 session['user_email'] = user[0]['email']
+                session['user_role'] = user[0]['role']
                 return render_template('dashboard.html', email= session["user_email"])
             else:
                 error = "invalid email or password"
@@ -67,9 +66,9 @@ def login_post():
             error = "invalid email or password"
             return render_template("register.html", error = error)
         if user[0]["role"] == 1:
-            return redirect("admin.html", email= session["user_email"])
+            return render_template("admin.html", email= session["user_email"])
         else:
-            return redirect("dashboard.html", email= session["user_email"])
+            return render_template("dashboard.html", email= session["user_email"])
     return render_template("login.html")
 
 
@@ -103,23 +102,35 @@ def apply():
             db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUE('{user_id}', '{amount}', 'pending', '{tenor}', '{installment}', '{balance}', 0)")
         row = db.execute(f"SELECT * FROM loans WHERE user_id= '{user_id}'")
         return render_template("dashboard.html", row = row)
+    if check_session() is False:
+        return render_template("index.html")
     return render_template("apply.html")
 
 @app.route("/logout")
 def logout():
-
-    session.clear()
-
-    return redirect("/")
+    userid=session.get('user_id')
+    if userid is None:
+        session.clear()
+        session.pop('user_email',None)
+        session.pop('user_id',None)        
+        return redirect(url_for('home'))
+    else:
+        session.clear()       
+        session.pop('user_email',None)
+        session.pop('user_id',None)
+        session.pop("user_id",None)
+        session.pop('userid',None)
+        session.pop(userid,None)        
+        return redirect(url_for('home'))
 
 @app.route("/edit", methods=["GET", "POST"])
 def edit_profile():
     """Edit  user Profile"""
     #check for session
-    sess_id=session["user_id"]
-    if not check_session(sess_id):
-        return redirect("/")
+    sess_id=session.get('user_id')
     if request.method=='GET':
+        if check_session() is False:
+            return redirect("/")
         rows = db.execute(f"select * from users where id = '{sess_id}'")
         lsofbanks=callbanks()
         if lsofbanks:
@@ -127,14 +138,14 @@ def edit_profile():
         return render_template("editprofile.html",details=rows, email= session["user_email"])
     if request.method=='POST':
         bvn=request.form.get("bvn").strip()
-        cbalance=request.form.get("cbalance").strip()
+        acctno=request.form.get("acctno").strip()
 
         first_name=request.form.get("first_name").strip()
         last_name=request.form.get("last_name").strip()
         phone=request.form.get("phone").strip()
-        bank_name=request.form.get("bank_name").strip()
+        bank_name=request.form.get("bank_name")
 
-        identification=request.form.get("identification").strip()
+        # identification=request.form.get("identification").strip()
         address=request.form.get("address").strip()
         nxtofkin=request.form.get("nxtofkin").strip()
 
@@ -143,16 +154,35 @@ def edit_profile():
         if not acctno or not bvn:
             message="You Must Fill your Account Number and BVN Details"
             return apology(message)
-        rows=db.execute(f"Update users set acctno='{acctno}', bvn='{bvn}',first_name='{first_name}',last_name='{last_name}',\
-                phone='{phone}',bank_name='{bank_name}', identification='{identification}',address='{address}',nxtofkin='{nxtofkin}',\
-                nxtofkin_phone='{nxtofkin_phone}' where id='{sess_id}'")
+        rows=db.execute(f"Update users set acctno='{acctno}', bvn='{bvn}',first_name='{first_name}',last_name='{last_name}',phone='{phone}',bank_name='{bank_name}',address='{address}',nxtofkin='{nxtofkin}',nxtofkin_phone='{nxtofkin_phone}' where id='{sess_id}'")
         flash("User Records Updated")
-        return redirect("dashboard.html", email= session["user_email"])
+        return render_template("dashboard.html", email= session["user_email"])
 
-def check_session(sess_id):
-    user_id=sess_id
-    rusers=db.execute(f"select * from users where id ='{user_id}'")
-    if rusers:
-        return True
-    else:
+def check_session():
+    uid=session.get('user_id')
+    print(uid)
+    if uid is None:
+        session.clear()
+        session.pop('user_email', None)
+        session.pop('user_id', None)
+        session.pop('user_role', None)
         return False
+
+def logoutuser():
+    session.pop('user_email', None)
+    session.pop('user_id', None)
+    session.pop('user_role', None)
+
+def adminrole():
+    role=session.get('role')
+    if role ==1:
+        abort(404)
+
+def custrole():
+    role=session.get('role')
+    if role ==0:
+        abort(404)
+        
+@app.errorhandler(404)
+def pagenotfound(error):
+    return render_template('index.html',error='404: it appears you have error')

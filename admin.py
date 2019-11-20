@@ -1,7 +1,7 @@
 from cs50 import SQL
 from . import app,db,mail
 from flask import Flask, flash, jsonify, redirect, render_template, request, session,json
-from flask_session import Session
+# from flask_session import Session
 from .users import check_session
 from flask_mail import Mail, Message
 from .helpers import send_mail
@@ -55,7 +55,7 @@ def loan_approval(uid):
         ############################################################################################
         flash("User Records Updated")
         return redirect("/userdashboard")
-
+        
 @app.route("/outstanding")
 def outstanding():
     """admin view oustanding loan"""
@@ -74,3 +74,11 @@ def loan():
     amt = 1
     loans = db.execute(f"SELECT * FROM loan WHERE repaid = '{amt}'")
     return render_template("loan.html", loans = loans)
+
+@app.route('/loan_reject',methods=['GET'])
+def rejectloan():
+    u=request.args.get('textstr')
+    print("u")
+    print(u)
+    db.execute(f"update loans set status= 2 where id='{u}'")
+    return json.dumps({'rejected':'1'})
