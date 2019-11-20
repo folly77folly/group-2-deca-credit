@@ -67,7 +67,7 @@ def naira(value):
 # Function to send mails
 def send_mail(to, subject, message):
     message = Mail(
-        from_email='loanapproved@decacredit.com.ng',
+        from_email='info@decacredit.com.ng',
         to_emails=to,
         subject=subject,
         html_content=message or '<strong>and easy to do anywhere, even with Python</strong>')

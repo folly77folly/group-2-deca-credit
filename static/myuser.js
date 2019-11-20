@@ -1,18 +1,18 @@
 function doloanreject(){
-    alert("dooo")
-    // data=$('#loanid').val()
-    data=2
-	urldata = 'textstr='+ data    
-data=$('#loanapproval').serialize()
+	//hide this value
+	data=$('#loanid').val()
+	urldata = 'textstr='+ data
+	// alert(urldata)
 $.ajax({
     url:'/loan_reject',
-    data:data,
+    data:urldata,
     type:'GET',
     dataType: 'json',
     success:function(tt){
         console.log(tt)
-        alert(tt)
-        window.location.href="{{ url_for('pending') }}";
+        alert("Loan Rejected Successfully")
+		window.location.href="{{ url_for('pending') }}"
+		
         },
         error:function(anyv){
             console.log(anyv)
