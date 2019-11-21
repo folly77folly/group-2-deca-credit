@@ -65,10 +65,10 @@ def login_post():
                 return redirect(url_for('userdashboard'))
             else:
                 error = "invalid email or password"
-                return render_template("register.html", error = error)
+                return render_template("login.html", error = error)
         else:
             error = "invalid email or password"
-            return render_template("register.html", error = error)
+            return render_template("login.html", error = error)
         if user[0]["role"] == 1:
             # return render_template("admin.html", email= session["user_email"])
             return redirect("admin.html")
@@ -94,12 +94,17 @@ def admindashboard():
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def userdashboard():
+    installment = 0.0
     user_id= session["user_id"]
-    userrows=db.execute("select * from users where id ='{user_id}'")
-    defaulterrows=db.execute("select * from loans where status='pending' and repaid='0'")
-    allusers=len(userrows)
-    defaulters=len(defaulterrows)
-    return render_template("dashboard.html", email= session["user_email"],allusers=allusers,defaulters=defaulters)
+    userrows=db.execute(f"select * from users where id ='{user_id}'")
+    payment = db.execute(f"select * from loans where user_id ='{user_id}' AND status='approve' AND repaid='0'") 
+    if len(payment):
+        installment = payment[0]["installment"]
+    repay = db.execute(f"select * from loans where user_id ='{user_id}' AND repaid ='1'")
+    repaid = len(repay)
+    pend = db.execute(f"select * from loans where user_id ='{user_id}' AND status ='pending'")
+    pending = len(pend)
+    return render_template("dashboard.html", email= session["user_email"],repaid=repaid, pending=pending, balance = userrows[0]["cbalance"], installment=installment)
 
 
 @app.route("/apply", methods=["GET", "POST"])

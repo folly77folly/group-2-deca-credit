@@ -38,7 +38,6 @@
   <a href="#" data-target="slide-out" class="sidenav-trigger">
       <i class="material-icons menu">menu</i>
   </a>
-  <div class="container">
     <div class="row">
      <div class="apply z-depth-4">
         {% extends "layout.html" %}
@@ -52,34 +51,34 @@
             <div class="success green-text"></div>
 
             <div class="input-field">
-                <i class="tiny material-icons prefix">account_balance</i>
+                <i class="tiny material-icons prefix">money</i>
                 <input id =acctno autocomplete="off" class="validate" required="" aria-required="true" id="amount" name="amount" type="text" required>
                 <label for="acctno">Amount</label>
             </div>
 
             <div class="input-field">
-                <i class="tiny material-icons prefix">account_balance</i>
+                <i class="tiny material-icons prefix">email</i>
                 <input readonly id=acctno autocomplete="off" class="validate" required="" aria-required="true" id="email" value="{{ email }} " type="text" required>
                 <label for="acctno">Email</label>
             </div>
             <div class="input-field">
             {% if row[0] %}
-            <i class="tiny material-icons prefix">account_balance</i>
+            <i class="tiny material-icons prefix">money</i>
             <input readonly id =acctno autocomplete="off" class="validate" required="" aria-required="true" name="balance" value="{{ row[0]['balance'] }} " type="text" required>
             <label for="acctno">Balance</label>
             {% else %}
-            <i class="small material-icons prefix">account_balance</i>
+            <i class="small material-icons prefix">money</i>
             <input readonly autocomplete="off" class="validate" required="" aria-required="true" name="balance" id="balance" type="text" required>
             <label for="acctno">Balance</label>
             {% endif %}
             </div>
             <div class="input-field">
             {% if row[0] %}
-            <i class="material-icons prefix">account_balance</i>
+            <i class="material-icons prefix">money</i>
             <input readonly class="validate" required="" aria-required="true" type="text" value="{{ row[0]['installment'] }} " required>
             <label for="bvn">Monthly Payment</label>
             {% else %}
-            <i class="material-icons prefix">account_balance</i>
+            <i class="material-icons prefix">money</i>
             <input readonly class="validate" required="" aria-required="true" type="text" required>
             <label for="bvn">Monthly Payment</label>
             {% endif %}
@@ -90,8 +89,6 @@
                  </form>
                 </div>
      </div>
-    </div>
-   </div>
 <body class="body">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
