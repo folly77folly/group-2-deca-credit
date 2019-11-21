@@ -3,7 +3,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 # from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from . import app,db
-from .helpers import apology, send_mail
+from .helpers import apology, send_mail,naira
 from .api import callbanks
 
 @app.route("/")
@@ -40,7 +40,7 @@ def register():
         session["user_id"] = row[0]["id"]
         session["user_email"] = row[0]["email"]
         flash('You were successfully logged in')
-        return render_template("dashboard.html",email= session["user_email"] )
+         return redirect(url_for('userdashboard'))
     return render_template("register.html")
 
 
@@ -71,9 +71,9 @@ def login_post():
             return render_template("login.html", error = error)
         if user[0]["role"] == 1:
             # return render_template("admin.html", email= session["user_email"])
-            return redirect(url_for('admindashboard'))
+            return redirect("admin.html")
         else:
-            return redirect(url_for('admindashboard'))
+            return redirect("admin.html")
             # return render_template("dashboard.html", email= session["user_email"])
     return render_template("login.html")
 
@@ -104,7 +104,7 @@ def userdashboard():
     repaid = len(repay)
     pend = db.execute(f"select * from loans where user_id ='{user_id}' AND status ='pending'")
     pending = len(pend)
-    return render_template("dashboard.html", email= session["user_email"],repaid=repaid, pending=pending, balance = userrows[0]["cbalance"], installment=installment)
+    return render_template("dashboard.html", email= session["user_email"],repaid=repaid, pending=pending, balance = naira(userrows[0]["cbalance"]), installment=installment)
 
 
 @app.route("/apply", methods=["GET", "POST"])
@@ -138,7 +138,7 @@ def apply():
         else:
             db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUES('{user_id}', '{amount}', '{status}', '{tenor}', '{installment}', '{balance}', '{repaid}')")
         row = db.execute(f"SELECT * FROM loans WHERE user_id= '{user_id}'")
-        return render_template("dashboard.html", row = row)
+        return redirect(url_for('userdashboard'))
     if check_session() is False:
         return render_template("index.html")
     return render_template("apply.html")
@@ -288,4 +288,4 @@ def pay():
         row = db.execute(f"SELECT * FROM loans WHERE user_id='{user_id}' AND repaid='{repaid}' AND status='{status}'")
         if len(row):
             return render_template("pay.html", row=row, email = session["user_email"])
-        return render_template("dashboard.html", email = session["user_email"])
+         return redirect(url_for('dashboard'))
