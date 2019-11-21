@@ -138,6 +138,22 @@ def apply():
         return render_template("index.html")
     return render_template("apply.html")
 
+@app.route('/history')
+def history():
+    user_id = session['user_id']
+    history = db.execute(f"SELECT * from tnxledger WHERE user_id = {user_id} order by tnxdate")
+    debits = db.execute(f"SELECT debit from tnxledger WHERE user_id = {user_id} order by tnxdate")
+    credit = db.execute(f"SELECT credit from tnxledger WHERE user_id = {user_id} order by tnxdate")
+ 
+
+    Tdebits= sum([item['debit'] for item in debits])
+    
+    Tcredits= sum([item['credit'] for item in credit])
+    
+    total = Tcredits - Tdebits
+    
+    return render_template('history.html', history=history, total=total, Tcredits=Tcredits,Tdebits=Tdebits)
+
 @app.route("/logout")
 def logout():
     userid=session.get('user_id')
