@@ -21,7 +21,7 @@ def loan_approval(uid):
         userdetails = db.execute(f"SELECT * FROM users WHERE id= '{user_id}'")
         bvn=userdetails[0]["bvn"]
         bvndetails=verifybvn(bvn)
-        return render_template("approval.html",userdetails=userdetails[0],bvndetails=bvndetails, loan=loan[0] uid=uid)
+        return render_template("approval.html",userdetails=userdetails[0],bvndetails=bvndetails, loan=loan[0], uid=uid)
     if request.method=='POST':
         loansrec=db.execute(f"select * from loans where id='{uid}' and status= 0")
         print(loansrec)
@@ -64,7 +64,7 @@ def outstanding():
     status = "pending"
     repaid = 0
     outstanding = db.execute(f"SELECT * FROM loans WHERE status = '{status}' AND repaid = '{repaid}'")
-    return render_template("outstanding.html", oustanding = outstanding)
+    return render_template("outstanding.html", oustanding = outstanding, email= session["user_email"])
 
 @app.route('/request')
 def pending():
@@ -72,7 +72,7 @@ def pending():
         return redirect("/")    
     status = "pending"
     pending = db.execute(f"SELECT * FROM loans WHERE status = '{status}'")
-    return render_template("request.html", pending=pending)
+    return render_template("request.html", pending=pending, email= session["user_email"])
 
 @app.route('/loans')
 def loan():
@@ -80,7 +80,7 @@ def loan():
         return redirect("/")    
     amt = 1
     loans = db.execute(f"SELECT * FROM loans WHERE repaid = '{amt}'")
-    return render_template("loan.html", loans = loans)
+    return render_template("loan.html", loans = loans, email= session["user_email"])
 
 @app.route('/loan_reject',methods=['GET'])
 def rejectloan():

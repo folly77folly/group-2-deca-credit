@@ -20,7 +20,7 @@
      <li><a href="#" class="btn-floating white">
        <i class="material-icons">person</i>
      </a></li>
-     <span class="user">Welcome Name</span>
+     <span class="user">{{email}}</span>
     </ul>
    </div>
   </nav>
@@ -28,17 +28,15 @@
         <li><div class="user-view">
             <div class="background">
             </div>
-            <a href="#user"><img class="circle" src="img/messi.jpeg"></a>
-            <a href="#name"><span class="white-text name">John Doe</span></a>
-            <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+            <a href="#email"><span class="white-text email">{{email}}</span></a>
           </div></li>    
-          <li><a href="./admin.html">dashboard</a></li>
-    <li><a href="./outstanding">View loan Request</a></li>
-    <li><a href="./allLoans">View all Loans</a></li>
+          <li><a href="/admin">dashboard</a></li>
+    <li><a href="#">View loan Request</a></li>
+    <li><a href="/outstanding">View Outstanding Loans</a></li>
   </ul>
   <div class="content">
   <a href="#" data-target="slide-out" class="sidenav-trigger">
-      <i class="material-icons">menu</i>
+      <i class="material-icons menu">menu</i>
   </a>
   <div class="container view">
     <div class="error red-text"></div>
@@ -70,7 +68,7 @@
 </div>
 </header>
 <body>
-        <script src="jquery-3.3.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
  $(document).ready(function(){

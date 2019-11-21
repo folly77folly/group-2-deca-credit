@@ -108,7 +108,7 @@ def apply():
         return render_template("dashboard.html", row = row)
     if check_session() is False:
         return render_template("index.html")
-    return render_template("apply.html")
+    return render_template("apply.html",email= session["user_email"] )
 
 @app.route('/history')
 def history():
@@ -241,7 +241,7 @@ def loanrepayment():
     send_mail(email,subject,message)
     return json.dumps({'paid':'2'})
   
-@app.route('/pay', methods=['GET'])
+@app.route('/pay', methods=['GET', 'POST'])
 def pay():
     if request.method == 'GET':
         repaid = 0
@@ -251,4 +251,4 @@ def pay():
         print(row)
         if len(row):
             return render_template("pay.html", row=row, email = session["user_email"])
-        return render_template("dashboard.html")
+        return render_template("dashboard.html", email= session["user_email"])
