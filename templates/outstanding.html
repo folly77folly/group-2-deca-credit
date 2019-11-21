@@ -15,12 +15,12 @@
     <a href="index.html" class="brand-logo"><img src="img/logo.png" alt=""></a>
     </a>    
     <ul class="right hide-on-med-and-down">
-     <li><a href="index.html">Home</a></li>
-     <li><a class="out" href="signin.html">Logout</a></li>
+     <li><a href="/admin">Home</a></li>
+     <li><a class="out" href="/logout">Logout</a></li>
      <li><a href="#" class="btn-floating white">
        <i class="material-icons">person</i>
      </a></li>
-     <span class="user">{{email}}</span>
+     <span class="user">Welcome {{email}}</span>
     </ul>
    </div>
   </nav>
@@ -28,7 +28,9 @@
         <li><div class="user-view">
             <div class="background">
             </div>
-            <a href="#email"><span class="white-text email">{{email}}</span></a>
+            <a href="#user"><img class="circle" src="img/messi.jpeg"></a>
+            <a href="#name"><span class="white-text name">John Doe</span></a>
+            <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
           </div></li>    
           <li><a href="/admin">dashboard</a></li>
     <li><a href="/request">View loan Request</a></li>
@@ -44,35 +46,44 @@
     <thead>
       <tr>
          
-          <th>loan id</th>
-          <th>Amount</th>
-          <th>Tenor</th>
-          <th>Status</th>
-          <th>monthlyPayment</th>
-          <th>Balance</th>
-          <th>Repaid</th>
+          <th>Loan ID</th>
+          <th>Requested Amount</th>
+          <th>Tenor (Months)</th>
+          <th>Loan Status</th>
+          <th>Monthly Repayment</th>
+          <th>Loan Balance</th>
+          <th>Paid Off</th>
       </tr>
     </thead>
 
     <tbody class="table">
       {% for loan in outstanding %}
       <tr>
-        <td>{{loan["id"]}}</td>
-        <td>{{loan["amount"]}}</td>
-        <td>{{loan["tenor"]}}</td>
-        <td>{{loan["stauts"]}}</td>
-        <td>{{loan["installment"]}}</td>
-        <td>{{loan["balance"]}}</td>
+        <td>{{ loan["id"] }}</td>
+        <td>{{ loan["amount"] }}</td>
+        <td>{{ loan["tenor"] }}</td>
+        <td>{{ loan["status"] }}</td>
+        <td>{{ loan["installment"] }}</td>
+        <td>{{ loan["balance"] }}</td>
         <td>False</td>
       </tr>
       {% endfor %}
     </tbody>
+    <tr>
+        <th>Total</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>{{ total }}</th>
+        <th></th>
+    </tr>
   </table>
  </div>
 </div>
 </header>
 <body>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
  $(document).ready(function(){

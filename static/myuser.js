@@ -11,7 +11,7 @@ $.ajax({
     success:function(tt){
         console.log(tt)
         alert("Loan Rejected Successfully")
-		window.location.href="{{ url_for('pending') }}"
+		window.location.href="http://localhost:5000/admin.html";
 		
         },
         error:function(anyv){

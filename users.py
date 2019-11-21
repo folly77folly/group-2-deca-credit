@@ -59,8 +59,10 @@ def login_post():
                 session['user_email'] = user[0]['email']
                 session['user_role'] = user[0]['role']
                 if user[0]["role"] == 1:
-                    return render_template("admin.html", email= session["user_email"])
-                return render_template('dashboard.html', email= session["user_email"])
+                    # return render_template("admin.html", email= session["user_email"])
+                    return redirect(url_for('admindashboard'))
+                # return render_template('dashboard.html', email= session["user_email"])
+                return redirect(url_for('userdashboard'))
             else:
                 error = "invalid email or password"
                 return render_template("register.html", error = error)
@@ -68,10 +70,36 @@ def login_post():
             error = "invalid email or password"
             return render_template("register.html", error = error)
         if user[0]["role"] == 1:
-            return render_template("admin.html", email= session["user_email"])
+            # return render_template("admin.html", email= session["user_email"])
+            return redirect("admin.html")
         else:
-            return render_template("dashboard.html", email= session["user_email"])
+            return redirect("admin.html")
+            # return render_template("dashboard.html", email= session["user_email"])
     return render_template("login.html")
+
+
+@app.route("/admin", methods=["GET", "POST"])
+def admindashboard():
+    user_id= session["user_id"]
+    userrows=db.execute("select * from users ")
+    unverifiedrows=db.execute("select * from users where bvn =' '")
+    loanrows=db.execute("select * from loans where status='pending'")
+    defaulterrows=db.execute("select * from loans where status='approved' and repaid='0'")
+    allusers=len(userrows)
+    pendingloans=len(loanrows)
+    defaulters=len(defaulterrows)
+    unverified=len(unverifiedrows)
+    return render_template("admin.html", email= session["user_email"],allusers=allusers,pendingloans=pendingloans,defaulters=defaulters,unverified=unverified)
+
+
+@app.route("/dashboard", methods=["GET", "POST"])
+def userdashboard():
+    user_id= session["user_id"]
+    userrows=db.execute("select * from users where id ='{user_id}'")
+    defaulterrows=db.execute("select * from loans where status='pending' and repaid='0'")
+    allusers=len(userrows)
+    defaulters=len(defaulterrows)
+    return render_template("dashboard.html", email= session["user_email"],allusers=allusers,defaulters=defaulters)
 
 
 @app.route("/apply", methods=["GET", "POST"])
@@ -108,15 +136,7 @@ def apply():
         return render_template("dashboard.html", row = row)
     if check_session() is False:
         return render_template("index.html")
-    return render_template("apply.html",email= session["user_email"] )
-
-@app.route('/history')
-def history():
-    user_id = session['user_id']
-    history = db.execute(f"SELECT * from loans WHERE user_id = {user_id}")
-    return render_template('history.html', history=history)
- 
-
+    return render_template("apply.html")
 
 @app.route("/logout")
 def logout():
@@ -172,7 +192,6 @@ def edit_profile():
 
 def check_session():
     uid=session.get('user_id')
-    print(uid)
     if uid is None:
         session.clear()
         session.pop('user_email', None)
@@ -217,8 +236,6 @@ def loanrepayment():
     loan_id=loanrow[0]["id"]
     balance=float(userrow[0]["cbalance"])
     repaid=0
-    print(balance)
-    print(loanrepay)
     newbalance=balance+loanrepay
     description="Loan Repayment using paystack"
     debit=0
@@ -241,14 +258,13 @@ def loanrepayment():
     send_mail(email,subject,message)
     return json.dumps({'paid':'2'})
   
-@app.route('/pay', methods=['GET', 'POST'])
+@app.route('/pay', methods=['GET'])
 def pay():
     if request.method == 'GET':
         repaid = 0
         status = "approved"
         user_id = session["user_id"]
         row = db.execute(f"SELECT * FROM loans WHERE user_id='{user_id}' AND repaid='{repaid}' AND status='{status}'")
-        print(row)
         if len(row):
             return render_template("pay.html", row=row, email = session["user_email"])
-        return render_template("dashboard.html", email= session["user_email"])
+        return render_template("dashboard.html", email = session["user_email"])

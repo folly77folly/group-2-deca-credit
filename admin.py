@@ -1,10 +1,10 @@
 from cs50 import SQL
 from . import app,db,mail
-from flask import Flask, flash, jsonify, redirect, render_template, request, session,json
+from flask import Flask, flash, jsonify, redirect, render_template, request, session,json,url_for
 # from flask_session import Session
 from .users import check_session
 from flask_mail import Mail, Message
-from .helpers import send_mail
+from .helpers import send_mail, naira
 from .api import verifybvn
 
 @app.route("/approval/<uid>", methods=["GET", "POST"])
@@ -16,15 +16,16 @@ def loan_approval(uid):
         if  check_session() is False:
             return redirect("/")
         loanid = int(uid)
-        loan = db.execute(f"SELECT * FROM loans WHERE id= '{loanid}'")
+        loan = db.execute(f"SELECT * FROM loans WHERE id= '{loanid}' and status ='pending'")
+        if loan == []:
+            return redirect(url_for('admindashboard'))
         user_id = loan[0]["user_id"]
         userdetails = db.execute(f"SELECT * FROM users WHERE id= '{user_id}'")
         bvn=userdetails[0]["bvn"]
         bvndetails=verifybvn(bvn)
         return render_template("approval.html",userdetails=userdetails[0],bvndetails=bvndetails, loan=loan[0], uid=uid)
     if request.method=='POST':
-        loansrec=db.execute(f"select * from loans where id='{uid}' and status= 0")
-        print(loansrec)
+        loansrec=db.execute(f"select * from loans where id='{uid}' and status= 'pending'")
         user_id=loansrec[0]["user_id"]
         loan_id=loansrec[0]["id"]
         description="Capital Loan Disbursement"
@@ -33,12 +34,11 @@ def loan_approval(uid):
         tenor=loansrec[0]["tenor"]
         rowuser=db.execute(f"select * from users where id='{user_id}'")
         db.execute(f"insert into tnxledger(user_id,loan_id,description,debit,credit,approved_by)values('{user_id}','{loan_id}','{description}','{debit}','{credit}','{sess_id}')")
-        print(rowuser)
         balance=rowuser[0]["cbalance"]
         email=rowuser[0]["email"]
         newbalance=balance-debit
         db.execute(f"update users set cbalance='{newbalance}' where id='{user_id}'")
-        db.execute(f"update loans set status='1' where id='{uid}'")
+        db.execute(f"update loans set status='approved' where id='{uid}'")
         ###############################################################
         surname=rowuser[0]["last_name"]
         firstname=rowuser[0]["first_name"]
@@ -54,38 +54,52 @@ def loan_approval(uid):
         send_mail(email, subject, message)
         ############################################################################################
         flash("User Records Updated")
-        return redirect("/userdashboard")
+        return redirect(url_for('admindashboard'))
         
 @app.route("/outstanding")
 def outstanding():
     """admin view oustanding loan"""
     if  check_session() is False:
         return redirect("/")
-    status = "pending"
+    user_id=session.get('user_id')
+    email=session.get('user_email')        
+    status = "approved"
     repaid = 0
     outstanding = db.execute(f"SELECT * FROM loans WHERE status = '{status}' AND repaid = '{repaid}'")
-    return render_template("outstanding.html", oustanding = outstanding, email= session["user_email"])
+    sumloan=db.execute(f"select sum(balance) as bal from loans where status = '{status}' AND repaid = '{repaid}'")
+    T_sum=sumloan[0]["bal"]
+    if T_sum is None:
+        T_sum=0
+    return render_template("outstanding.html", outstanding = outstanding,email=email,total=naira(T_sum))
 
 @app.route('/request')
 def pending():
+    user_id=session.get('user_id')
+    email=session.get('user_email')
     if  check_session() is False:
         return redirect("/")    
     status = "pending"
+    repaid = 0
     pending = db.execute(f"SELECT * FROM loans WHERE status = '{status}'")
-    return render_template("request.html", pending=pending, email= session["user_email"])
+    sumloanpend=db.execute(f"select sum(amount) as bal from loans where status = '{status}' AND repaid = '{repaid}'")
+    T_sum=sumloanpend[0]["bal"]
+    if T_sum is None:
+        T_sum=0
+    return render_template("request.html", pending=pending,email=email,total=naira(T_sum))
 
 @app.route('/loans')
 def loan():
     if  check_session() is False:
-        return redirect("/")    
+        return redirect("/")
+    user_id=session.get('user_id')
+    email=session.get('user_email')   
     amt = 1
     loans = db.execute(f"SELECT * FROM loans WHERE repaid = '{amt}'")
-    return render_template("loan.html", loans = loans, email= session["user_email"])
+    return render_template("loan.html", loans = loans,email=email)
 
 @app.route('/loan_reject',methods=['GET'])
 def rejectloan():
     u=request.args.get('textstr')
-    print(u)
     db.execute(f"update loans set status= 2 where id='{u}'")
     return json.dumps({'rejected':'1'})
     user_id=session.get('user_id')
