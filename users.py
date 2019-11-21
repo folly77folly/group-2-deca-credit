@@ -40,7 +40,7 @@ def register():
         session["user_id"] = row[0]["id"]
         session["user_email"] = row[0]["email"]
         flash('You were successfully logged in')
-        return render_template("dashboard.html",email= session["user_email"] )
+         return redirect(url_for('userdashboard'))
     return render_template("register.html")
 
 
@@ -138,7 +138,7 @@ def apply():
         else:
             db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUES('{user_id}', '{amount}', '{status}', '{tenor}', '{installment}', '{balance}', '{repaid}')")
         row = db.execute(f"SELECT * FROM loans WHERE user_id= '{user_id}'")
-        return render_template("dashboard.html", row = row)
+        return redirect(url_for('userdashboard'))
     if check_session() is False:
         return render_template("index.html")
     return render_template("apply.html")
@@ -288,4 +288,4 @@ def pay():
         row = db.execute(f"SELECT * FROM loans WHERE user_id='{user_id}' AND repaid='{repaid}' AND status='{status}'")
         if len(row):
             return render_template("pay.html", row=row, email = session["user_email"])
-        return render_template("dashboard.html", email = session["user_email"])
+         return redirect(url_for('dashboard'))

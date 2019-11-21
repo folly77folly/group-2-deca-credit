@@ -5,6 +5,13 @@
     background-repeat: no-repeat;
     height: 100vh;
    }
+   .bod{
+    background-image: url('../images/d.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+   }
    .diff::after{
     content:'';
     background-image: url('../images/dash2.jpg');
@@ -21,9 +28,9 @@
      position: absolute;
      z-index: 1;
    }
-   table{ 
+   /* table{ 
     margin-left: 30vh;
-   }
+   } */
   img{
    height: 60px;
    width: 180px;
@@ -39,6 +46,7 @@
       background-color: white;
       margin-left: 20px;
       margin-top: 5px;
+      margin-bottom: 0px;
   }
   .background{
    background-image: url('../images/dash3.jpg');
@@ -46,6 +54,9 @@
    background-position: center;
    background-repeat: no-repeat;
   }
+  /* .table-bordered{
+    margin-left: 20vh;
+  } */
   .apply{
     min-height: 60vh;
     opacity: 0.9;
