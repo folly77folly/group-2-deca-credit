@@ -71,9 +71,9 @@ def login_post():
             return render_template("login.html", error = error)
         if user[0]["role"] == 1:
             # return render_template("admin.html", email= session["user_email"])
-            return redirect("admin.html")
+            return redirect(url_for('admindashboard'))
         else:
-            return redirect("admin.html")
+            return redirect(url_for('admindashboard'))
             # return render_template("dashboard.html", email= session["user_email"])
     return render_template("login.html")
 
@@ -209,7 +209,7 @@ def edit_profile():
             return apology(message)
         rows=db.execute(f"Update users set acctno='{acctno}', bvn='{bvn}',first_name='{first_name}',last_name='{last_name}',phone='{phone}',bank_name='{bank_name}',address='{address}',nxtofkin='{nxtofkin}',nxtofkin_phone='{nxtofkin_phone}' where id='{sess_id}'")
         flash("User Records Updated")
-        return render_template("dashboard.html", email= session["user_email"])
+        return redirect(url_for('userdashboard'))
 
 def check_session():
     uid=session.get('user_id')
