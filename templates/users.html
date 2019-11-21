@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>View Loans</title>
+ <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+ <link href="../static/css/icon.css" rel="stylesheet">
+ <link rel="stylesheet" href="../static/css/dashboard.css">
+ <style>
+ .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+ </style>
+</head>
+<header class="diff">
+  <nav class="nav-wraper">
+   <div class="container">
+    <a href="index.html" class="brand-logo"><img src="img/logo.png" alt=""></a>
+    </a>    
+    <ul class="right hide-on-med-and-down">
+     <li><a href="/admin">Home</a></li>
+     <li><a class="out" href="/logout">Logout</a></li>
+     <li><a href="#" class="btn-floating white">
+       <i class="material-icons">person</i>
+     </a></li>
+     <span class="user">Welcome {{ email }}</span>
+    </ul>
+   </div>
+  </nav>
+  <ul id="slide-out" class="sidenav">
+        <li><div class="user-view">
+            <div class="background">
+            </div>
+            <a href="#user"><img class="circle" src="img/messi.jpeg"></a>
+            <a href="#name"><span class="white-text name">John Doe</span></a>
+            <a href="#email"><span class="white-text email">{{ email }}</span></a>
+          </div></li>    
+          <li><a href="/admin">dashboard</a></li>
+          <li><a href="#">View loan Request</a></li>
+          <li><a href="/outstanding">View Outstanding Loans</a></li>
+          <li><a href="/allusers">View All Users</a></li>
+          
+  </ul>
+  <div class="content">
+  <a href="#" data-target="slide-out" class="sidenav-trigger">
+      <i class="material-icons menu">menu</i>
+  </a>
+  <div class="container view">
+    <div class="error red-text"></div>
+    <table class="table table-striped table-bordered" id="survey">
+        <thead>
+          <tr>
+              <th>S/N</th>
+              <th>User ID</th>
+              <th>Email</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>BVN No</th>
+              <th>Phone No</th>
+              <th>Account No</th>
+              <th>Bank Name</th>
+              <th>Reg. Date</th>
+              <th>Activate/Decativate</th>
+          </tr>
+        </thead>
+    
+        <tbody class="">
+          {% for user  in users %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td>{{user["id"]}}</td>
+            <td>{{user["email"]}}</td>
+            <td>{{user["first_name"]}}</td>
+            <td>{{user["last_name"]}}</td>
+            <td>{{user["bvn"]}}</td>
+            <td>{{user["phone"]}}</td>
+            <td>{{user["acctno"]}}</td>
+            <td>{{user["bank_name"]}}</td>
+            <td>{{user["created_date"]}}</td>
+            <td>
+                {% if user["active"] == 'Y'  %}
+                  <input type="checkbox"  class="active" id="{{ user['id'] }}" checked="checked" >
+                  {% else %}
+                  <input type="checkbox" class="active" id="{{ user['id'] }}" >
+                {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        </table>
+ </div>
+</div>
+</header>
+  <body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+ $(document).ready(function(){
+     $('#survey').DataTable();
+      $('.sidenav').sidenav()
+  })
+
+  $(document).on('click', '.active', function( e ){
+        var that = $(this);
+        var id = that.attr('id');
+    	  urldata = 'textstr='+ id
+	      // alert(urldata)
+        $.ajax({
+        url:'/activate',
+        data:urldata,
+        type:'GET',
+        dataType: 'json',
+        success:function(tt){
+        // alert("User De Successfully")
+		    // window.location.href="{{ url_for('allusers') }}";
+		
+        },
+        error:function(anyv){
+            console.log(anyv)
+        }
+
+        })
+
+        // var rel = that.data('rel');
+        // var ajaxurl = that.data('url');
+        //     alert(id);
+
+    })
+</script>
+</body>
+</html>
