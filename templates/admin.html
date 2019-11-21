@@ -15,12 +15,12 @@
     <a href="/index" class="brand-logo"><img src="img/logo.png" alt=""></a>
     </a>    
     <ul class="right hide-on-med-and-down">
-     <li><a href="/index">Home</a></li>
-     <li><a class="out" href="/signin">Logout</a></li>
+     <li><a href="/admin">Home</a></li>
+     <li><a class="out" href="/logout">Logout</a></li>
      <li><a href="#" class="btn-floating white">
        <i class="material-icons">person</i>
      </a></li>
-     <span class="user">{{email}}</span>
+     <span class="user">Welcome {{email}}</span>
     </ul>
    </div>
   </nav>
@@ -28,10 +28,10 @@
         <li><div class="user-view">
             <div class="background">
             </div>
-            <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+            <a href="#email"><span class="white-text email">{{ email }}</span></a>
           </div></li>
-    <li><a href="/request">View loan Request</a></li>
-    <li><a href="/outstanding">View outstanding loans</a></li>
+          <li><a href="/request">View loan Request</a></li>
+          <li><a href="/outstanding">View outstanding loans</a></li>
   </ul>
   <a href="#" data-target="slide-out" class="sidenav-trigger">
       <i class="material-icons menu">menu</i>
@@ -40,20 +40,20 @@
       <div class="row">
           <div class="col s6">
               <div class="z-depth-5">
-                  <h4>6</h4>
-                  <p>pending loan applications</p>
+                  <h4>{{ pendingloans }}</h4>
+                  <p>Pending Loan Application(s)</p>
               </div>
           </div>
           <div class="col s6">
               <div class="z-depth-5">
-                <h4>10</h4>
-                <p>new users yet to be verified</p>
+                <h4>{{ unverified }}</h4>
+                <p>New User(s) yet to be Verified</p>
               </div>
           </div>
           <div class="col s6">
               <div class="z-depth-5">
-                  <h4>7</h4>
-                  <p>defaulters</p>
+                  <h4>{{ defaulters }}</h4>
+                  <p>Loan Defaulter(s)</p>
               </div>
           </div>
           <div class="col s6">
