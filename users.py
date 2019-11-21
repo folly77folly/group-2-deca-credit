@@ -176,7 +176,7 @@ def edit_profile():
         last_name=request.form.get("last_name").strip()
         phone=request.form.get("phone").strip()
         bank_name=request.form.get("bank_name")
-
+        print(bank_name)
         # identification=request.form.get("identification").strip()
         address=request.form.get("address").strip()
         nxtofkin=request.form.get("nxtofkin").strip()

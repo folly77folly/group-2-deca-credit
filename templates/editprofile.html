@@ -133,7 +133,7 @@
             <label for="nxtofkin_phone">Next of kin phone-number</label>
             {% endif %}
         </div>
-              <select id="bank_nam" class="browser-default tenor">
+              <select name="bank_name" class="browser-default tenor">
                 {% if details[0]['bank_name'] %}
                     <option value="{{ details[0]['bank_name'] }}">{{ details[0]['bank_name'] }}</option>
                     {% for bank in banks %}

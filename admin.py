@@ -97,11 +97,19 @@ def loan():
     loans = db.execute(f"SELECT * FROM loans WHERE repaid = '{amt}'")
     return render_template("loan.html", loans = loans,email=email)
 
+@app.route('/allusers')
+def allusers():
+    if  check_session() is False:
+        return redirect("/")
+    user_id=session.get('user_id')
+    email=session.get('user_email')   
+    usersrow = db.execute(f"SELECT * FROM users")
+    return render_template("users.html", users = usersrow,email=email)
+
 @app.route('/loan_reject',methods=['GET'])
 def rejectloan():
     u=request.args.get('textstr')
     db.execute(f"update loans set status= 2 where id='{u}'")
-    return json.dumps({'rejected':'1'})
     user_id=session.get('user_id')
     userrow=db.execute(f"Select * from users where id='{user_id}'")
     surname=userrow[0]["last_name"]
@@ -117,3 +125,15 @@ def rejectloan():
     db.execute(f"update loans set status= 2 where id='{loanid}'")
     send_mail(email,subject,message)
     return json.dumps({'rejected':'2'})
+
+
+@app.route('/activate',methods=['GET'])
+def activate():
+    u=request.args.get('textstr')
+    statusrow=db.execute(f"select * from users where id = '{u}' ")
+    status=statusrow[0]["active"]
+    if status=='Y':
+        db.execute(f"update users set active= 'N' where id='{u}'")
+    else:
+        db.execute(f"update users set active= 'Y' where id='{u}'")
+    return json.dumps({'rejected':'1'})
