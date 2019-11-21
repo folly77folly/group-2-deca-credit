@@ -3,7 +3,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 # from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from . import app,db
-from .helpers import apology, send_mail
+from .helpers import apology, send_mail,naira
 from .api import callbanks
 
 @app.route("/")
@@ -104,7 +104,7 @@ def userdashboard():
     repaid = len(repay)
     pend = db.execute(f"select * from loans where user_id ='{user_id}' AND status ='pending'")
     pending = len(pend)
-    return render_template("dashboard.html", email= session["user_email"],repaid=repaid, pending=pending, balance = userrows[0]["cbalance"], installment=installment)
+    return render_template("dashboard.html", email= session["user_email"],repaid=repaid, pending=pending, balance = naira(userrows[0]["cbalance"]), installment=installment)
 
 
 @app.route("/apply", methods=["GET", "POST"])
@@ -193,7 +193,7 @@ def edit_profile():
             return apology(message)
         rows=db.execute(f"Update users set acctno='{acctno}', bvn='{bvn}',first_name='{first_name}',last_name='{last_name}',phone='{phone}',bank_name='{bank_name}',address='{address}',nxtofkin='{nxtofkin}',nxtofkin_phone='{nxtofkin_phone}' where id='{sess_id}'")
         flash("User Records Updated")
-        return render_template("dashboard.html", email= session["user_email"])
+        return redirect(url_for('userdashboard'))
 
 def check_session():
     uid=session.get('user_id')

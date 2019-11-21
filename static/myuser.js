@@ -50,7 +50,10 @@ function findMe(){
         function payWithPaystack(){
 			var repayment = $('#amount').val();
 			var balance = $('#loanbalance').val();
-			var email = $('#email').val();
+            var email = $('#email').val();
+            alert(repayment)
+            alert(balance)
+            alert(email)
         if (repayment==' ' || repayment==0 || repayment<0){
             alert('Enter A valid Amount');
             $('#amount').focus();

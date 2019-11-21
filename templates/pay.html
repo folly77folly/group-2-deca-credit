@@ -52,19 +52,19 @@
 
             <div class="input-field">
                 <i class="tiny material-icons prefix">money</i>
-                <input id =acctno autocomplete="off" class="validate" required="" aria-required="true" id="amount" name="amount" type="text" required>
+                <input autocomplete="off" class="validate" required="" aria-required="true" id="amount" name="amount" type="text" required>
                 <label for="acctno">Amount</label>
             </div>
 
             <div class="input-field">
                 <i class="tiny material-icons prefix">email</i>
-                <input readonly id=acctno autocomplete="off" class="validate" required="" aria-required="true" id="email" value="{{ email }} " type="text" required>
+                <input readonly autocomplete="off" class="validate" required="" aria-required="true" id="emails" name="emails" value="{{ email }} " type="text" required>
                 <label for="acctno">Email</label>
             </div>
             <div class="input-field">
             {% if row[0] %}
             <i class="tiny material-icons prefix">money</i>
-            <input readonly id =acctno autocomplete="off" class="validate" required="" aria-required="true" name="balance" value="{{ row[0]['balance'] }} " type="text" required>
+            <input readonly autocomplete="off" class="validate" required="" aria-required="true" name="balance" value="{{ row[0]['balance'] }} " type="text" required>
             <label for="acctno">Balance</label>
             {% else %}
             <i class="small material-icons prefix">money</i>
@@ -83,19 +83,108 @@
             <label for="bvn">Monthly Payment</label>
             {% endif %}
             </div>
-            <input type ="hidden" value="-50000" id ="loanbalance" name ="loanbalance">
-            <input type ="hidden" value="a@yahoo.com" id ="email" name ="email">
-              <input type="submit" class="btn-large" value="Pay">
+            <input type ="hidden" value="{{ row[0]['balance'] }}" id ="loanbalance" name ="loanbalance">
+            <input type ="hidden" value="{{ email }}" id ="email" name ="email">
+              <input onclick=payWithPaystack(); type="button" class="btn-large" value="Pay">
                  </form>
                 </div>
      </div>
 <body class="body">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- <script src="../static/myuser.js"></script> -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
   $(document).ready(function(){
    $('.sidenav').sidenav()
   })
+
+
+  function payWithPaystack(){
+			var repayment = $('#amount').val();
+			var balance = $('#loanbalance').val();
+      var emails = $('#email').val();
+        if (repayment==' ' || repayment==0 || repayment<0){
+            alert('Enter A valid Amount');
+            $('#amount').focus();
+			event.preventDefault(); 
+			
+		}
+		else if(isNaN(repayment)==true){
+            alert('Only Numbers are allowed ');
+            $('#amount').focus();
+			event.preventDefault();			
+		}  		
+		else if(Number(balance)>=0){
+            alert('Loan Balance Cannot be Zero');
+            $('#amount').focus();
+			event.preventDefault();
+    }	else if(Number(repayment)<Number(balance)){
+            alert('Repayment Cannot be less than Loan Balance');
+            $('#amount').focus();
+			event.preventDefault();
+		}  
+       
+        else{
+            var email=emails
+            var amt=$('#amount').val()*100
+            var handler = PaystackPop.setup({
+                    key: 'pk_test_e540194faba0a917009e15da930c0e2803408318',
+                    email: email,
+                    amount: amt,
+                    currency: "NGN",
+                ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                
+                metadata: {
+                     custom_fields: [
+                            {
+                                    display_name: "Mobile Number",
+                                    variable_name: "mobile_number",
+                                    value: "+2348012345678"
+                            }
+                     ]
+                },
+                callback: function(){
+                    // document.getElementById('paytackref').value=ref
+                        doaajax()
+                        alert('success. transaction ref is ' + response.reference);
+
+                },
+                onClose: function(){
+                        alert('window closed');
+                }
+            });
+            handler.openIframe();
+        }
+
+    }   
+
+    
+    function doaajax(){
+    // data=$('#xyz').val()
+    data=$('#repayment').serialize()
+    // abc=confirm('Are You Sure You Want to Connect to secure banking')
+    // if (abc==true){
+    $.ajax({
+        url:'/loanrepayment',
+        data:data,
+        type:'POST',
+        dataType: 'json',
+        success:function(tt){
+            // console.log(tt)
+            alert("Payment Successfully Made")
+			window.location.href="{{ url_for('userdashboard') }}";
+        },
+        error:function(anyv){
+            console.log(anyv)
+        }
+
+    })
+
+}
+    
+
+
   </script>
 </body>
 </html>
