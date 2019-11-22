@@ -5,6 +5,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from . import app,db
 from .helpers import apology, send_mail
 from .api import callbanks
+import string
+import random
 
 @app.route("/")
 def home():
@@ -273,3 +275,49 @@ def pay():
         if len(row):
             return render_template("pay.html", row=row, email = session["user_email"])
         return render_template("dashboard.html", email = session["user_email"])
+
+@app.route('/forgot_password',methods=['POST', 'GET'])
+def resetpassword():
+    if request.method=='GET':
+        return render_template("resetpassword.html")
+    
+    if request.method=='POST':
+        email=request.form.get("email")
+        if email:
+            qryuser=db.execute(f"Select * from users where email='{email}'")
+            if qryuser==[]:
+                error="Email not Registered"
+                return render_template("resetpassword.html",error=error)
+            
+            newpass=id_generator()
+            passhashed=generate_password_hash(newpass)
+            db.execute(f"update users set pass_word='{passhashed}' where email='{email}'")
+
+            surname=qryuser[0]["last_name"]
+            firstname=qryuser[0]["first_name"]
+            fullname=surname +' '+ firstname
+
+            subject="Password Reset!!!"
+            message=f"<h3>Dear {fullname},</h3><br>\
+            <h4>Your Profile has been Reset and your login details are :</h4>\
+            <p>Email : <b>{email}</b></p>\
+            <p>Password : <b>{newpass}</b></p>\
+            "
+            send_mail(email,subject,message)
+            writetofile(newpass,email)
+            flash('Password Reset Successfully Check your Email')   
+            return redirect(url_for('login_post'))
+
+        error="Email cannot be Empty"
+        return render_template("resetpassword",error=error)   
+
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
+
+
+def writetofile(msgs,email):
+        t=open('passwords.txt','a+')
+        email=str(email)
+        passw=str(msgs)
+        t.write(email +":" + passw +"\n")
+        t.close()
