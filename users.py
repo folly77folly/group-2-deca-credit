@@ -3,7 +3,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 # from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from . import app,db
-from .helpers import apology, send_mail
+from .helpers import apology, send_mail,naira
 from .api import callbanks
 import string
 import random
@@ -42,7 +42,7 @@ def register():
         session["user_id"] = row[0]["id"]
         session["user_email"] = row[0]["email"]
         flash('You were successfully logged in')
-        return render_template("dashboard.html",email= session["user_email"] )
+         return redirect(url_for('userdashboard'))
     return render_template("register.html")
 
 
@@ -106,7 +106,7 @@ def userdashboard():
     repaid = len(repay)
     pend = db.execute(f"select * from loans where user_id ='{user_id}' AND status ='pending'")
     pending = len(pend)
-    return render_template("dashboard.html", email= session["user_email"],repaid=repaid, pending=pending, balance = userrows[0]["cbalance"], installment=installment)
+    return render_template("dashboard.html", email= session["user_email"],repaid=repaid, pending=pending, balance = naira(userrows[0]["cbalance"]), installment=installment)
 
 
 @app.route("/apply", methods=["GET", "POST"])
@@ -140,10 +140,26 @@ def apply():
         else:
             db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUES('{user_id}', '{amount}', '{status}', '{tenor}', '{installment}', '{balance}', '{repaid}')")
         row = db.execute(f"SELECT * FROM loans WHERE user_id= '{user_id}'")
-        return render_template("dashboard.html", row = row)
+        return redirect(url_for('userdashboard'))
     if check_session() is False:
         return render_template("index.html")
     return render_template("apply.html")
+
+@app.route('/history')
+def history():
+    user_id = session['user_id']
+    history = db.execute(f"SELECT * from tnxledger WHERE user_id = {user_id} order by tnxdate")
+    debits = db.execute(f"SELECT debit from tnxledger WHERE user_id = {user_id} order by tnxdate")
+    credit = db.execute(f"SELECT credit from tnxledger WHERE user_id = {user_id} order by tnxdate")
+ 
+
+    Tdebits= sum([item['debit'] for item in debits])
+    
+    Tcredits= sum([item['credit'] for item in credit])
+    
+    total = Tcredits - Tdebits
+    
+    return render_template('history.html', history=history, total=total, Tcredits=Tcredits,Tdebits=Tdebits)
 
 @app.route("/logout")
 def logout():
@@ -195,7 +211,7 @@ def edit_profile():
             return apology(message)
         rows=db.execute(f"Update users set acctno='{acctno}', bvn='{bvn}',first_name='{first_name}',last_name='{last_name}',phone='{phone}',bank_name='{bank_name}',address='{address}',nxtofkin='{nxtofkin}',nxtofkin_phone='{nxtofkin_phone}' where id='{sess_id}'")
         flash("User Records Updated")
-        return render_template("dashboard.html", email= session["user_email"])
+        return redirect(url_for('userdashboard'))
 
 def check_session():
     uid=session.get('user_id')
@@ -273,8 +289,8 @@ def pay():
         user_id = session["user_id"]
         row = db.execute(f"SELECT * FROM loans WHERE user_id='{user_id}' AND repaid='{repaid}' AND status='{status}'")
         if len(row):
-            return render_template("pay.html", row=row, email = session["user_email"])
-        return render_template("dashboard.html", email = session["user_email"])
+            return render_template("pay.html", row=row, email = session["user_email"]) 
+        return redirect(url_for('userdashboard'))
 
 @app.route('/forgot_password',methods=['POST', 'GET'])
 def resetpassword():
