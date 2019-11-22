@@ -62,7 +62,7 @@ def lookup(symbol):
 
 def naira(value):
     """Format value as Naira."""
-    return f"=N={value:,.2f}"
+    return f"{value:,.2f}"
 
 # Function to send mails
 def send_mail(to, subject, message):

@@ -38,7 +38,7 @@ def loan_approval(uid):
         email=rowuser[0]["email"]
         newbalance=balance-debit
         db.execute(f"update users set cbalance='{newbalance}' where id='{user_id}'")
-        db.execute(f"update loans set status='approved' where id='{uid}'")
+        db.execute(f"update loans set balance='{newbalance}',status='approved',repaid='0' where id='{uid}'")
         ###############################################################
         surname=rowuser[0]["last_name"]
         firstname=rowuser[0]["first_name"]
