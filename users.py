@@ -27,6 +27,9 @@ def register():
         if email=="" or passw=="" or cpassw=="":
             error="email or Password or Confrim Password Cannot be Empty"
             return render_template("register.html", error = error)
+        if len(passw)<=5:
+            error="Password cannot be less than 6 characters"
+            return render_template("register.html", error = error)
 
         if passw!=cpassw:
             error="Password Mismatch"
