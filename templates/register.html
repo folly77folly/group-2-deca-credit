@@ -21,7 +21,7 @@
         {% extends "layout.html" %}
         {% block body %}
         {% if error %}
-      <p class=error><strong>Message</strong> {{ error }}
+      <p class="error red-text"><strong>Message</strong> {{ error }}
       {% endif %}
       <form action="/register", method="POST">
           <h3>Sign Up</h3>
