@@ -53,7 +53,7 @@ def loan_approval(uid):
             <p>Click on the <a href='https://abc.com/'>Link</a> to login</p>"  
         send_mail(email, subject, message)
         ############################################################################################
-        flash("User Records Updated")
+        flash("Loan Request Successfully Approved")
         return redirect(url_for('admindashboard'))
         
 @app.route("/outstanding")
@@ -129,6 +129,8 @@ def rejectloan():
 
 @app.route('/activate',methods=['GET'])
 def activate():
+    if check_session() is False:
+        return redirect("/")
     u=request.args.get('textstr')
     statusrow=db.execute(f"select * from users where id = '{u}' ")
     status=statusrow[0]["active"]

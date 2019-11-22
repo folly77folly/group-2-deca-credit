@@ -44,7 +44,7 @@ def register():
         row = db.execute(f"Select * from users where email='{email}'")
         session["user_id"] = row[0]["id"]
         session["user_email"] = row[0]["email"]
-        flash('You were successfully logged in')
+        flash('Welcome, Update your Profile to Continue!')
         return redirect(url_for('userdashboard'))
     return render_template("register.html")
 
@@ -66,7 +66,12 @@ def login_post():
                 if user[0]["role"] == 1:
                     # return render_template("admin.html", email= session["user_email"])
                     return redirect(url_for('admindashboard'))
-                # return render_template('dashboard.html', email= session["user_email"])
+                name=user[0]['first_name']
+                if name is None:
+                    fmessage="Welcome Back ,"
+                else:
+                    fmessage=f"Welcome Back {name} ,"
+                flash(fmessage)
                 return redirect(url_for('userdashboard'))
             else:
                 error = "invalid email or password"
@@ -143,6 +148,7 @@ def apply():
         else:
             db.execute(f"INSERT INTO loans (user_id, amount, status, tenor, installment, balance, repaid) VALUES('{user_id}', '{amount}', '{status}', '{tenor}', '{installment}', '{balance}', '{repaid}')")
         row = db.execute(f"SELECT * FROM loans WHERE user_id= '{user_id}'")
+        flash("Loan Request Successfully Made")
         return redirect(url_for('userdashboard'))
     if check_session() is False:
         return render_template("index.html")
@@ -150,6 +156,8 @@ def apply():
 
 @app.route('/history')
 def history():
+    if check_session() is False:
+        return redirect("/")
     user_id = session['user_id']
     history = db.execute(f"SELECT * from tnxledger WHERE user_id = {user_id} order by tnxdate")
     debits = db.execute(f"SELECT debit from tnxledger WHERE user_id = {user_id} order by tnxdate")
@@ -215,7 +223,7 @@ def edit_profile():
             message="You Must Fill your Account Number and BVN Details"
             return apology(message)
         rows=db.execute(f"Update users set acctno='{acctno}', bvn='{bvn}',first_name='{first_name}',last_name='{last_name}',phone='{phone}',bank_name='{bank_name}',address='{address}',nxtofkin='{nxtofkin}',nxtofkin_phone='{nxtofkin_phone}' where id='{sess_id}'")
-        flash("User Records Updated")
+        flash("Profile Updated Successfully")
         return redirect(url_for('userdashboard'))
 
 def check_session():
@@ -295,6 +303,7 @@ def pay():
         row = db.execute(f"SELECT * FROM loans WHERE user_id='{user_id}' AND repaid='{repaid}' AND status='{status}'")
         if len(row):
             return render_template("pay.html", row=row, email = session["user_email"]) 
+        flash('No Outstanding Loan Record Found')
         return redirect(url_for('userdashboard'))
 
 @app.route('/forgot_password',methods=['POST', 'GET'])
