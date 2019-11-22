@@ -28,14 +28,16 @@ body{
     height: 100vh;
    }
    .background{
-    margin-top: 25vh;
+    margin-top: 40vh;
+    margin-left: 10vh;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 0 20px;
-    color: black
+    color: black;
+    text-shadow: 1px 1px white;
    }
    .background p{
     font-size: 20px;
@@ -49,4 +51,7 @@ body{
    background-color: whitesmoke;
    min-height: 70vh;
    opacity: 0.9;
+   }
+   .brand-logo{
+    color:white
    }

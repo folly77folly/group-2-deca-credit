@@ -48,22 +48,22 @@
             <div class="input-field">
             {% if details[0]['acctno'] %}
             <i class="tiny material-icons prefix">account_balance</i>
-            <input id =acctno autocomplete="off" class="validate" required="" aria-required="true" name="acctno" value="{{ details[0]['acctno'] }} " type="text" required>
+            <input id =acctno autocomplete="off" class="validate" required="" aria-required="true" name="acctno" value="{{ details[0]['acctno'] }} " type="number" required>
             <label for="acctno">Account Number</label>
             {% else %}
             <i class="small material-icons prefix">account_balance</i>
-            <input autocomplete="off" class="validate" required="" aria-required="true" name="acctno" id="acctno" type="text" required>
+            <input autocomplete="off" class="validate" required="" aria-required="true" name="acctno" id="acctno" type="number" required>
             <label for="acctno">Account Number</label>
             {% endif %}
             </div>
             <div class="input-field">
             {% if details[0]['bvn'] %}
             <i class="material-icons prefix">vpn_key</i>
-            <input class="validate" required="" aria-required="true" name="bvn" id="bvn" type="text" value="{{ details[0]['bvn'] }} " required>
+            <input class="validate" required="" aria-required="true" name="bvn" id="bvn" type="number" value="{{ details[0]['bvn'] }} " required>
             <label for="bvn">Bvn</label>
             {% else %}
             <i class="material-icons prefix">vpn_key</i>
-            <input class="validate" required="" aria-required="true" name="bvn" id="bvn" type="text" required>
+            <input class="validate" required="" aria-required="true" name="bvn" id="bvn" type="number" required>
             <label for="bvn">Bvn</label>
             {% endif %}
             </div>
@@ -92,11 +92,11 @@
             <div class="input-field">
             {% if details[0]['phone'] %}
             <i class="material-icons prefix">phone</i>
-            <input class="validate" required="" aria-required="true" name="phone" id="phone" type="text" value="{{ details[0]['phone'] }} "required>
+            <input class="validate" required="" aria-required="true" name="phone" id="phone" type="number" value="{{ details[0]['phone'] }} "required>
             <label for="phone">Phone Number</label>
             {% else %}
             <i class="material-icons prefix">phone</i>
-            <input class="validate" required="" aria-required="true" name="phone" id="phone" type="text" required>
+            <input class="validate" required="" aria-required="true" name="phone" id="phone" type="number" required>
             <label for="phone">Phone Number</label>
             {% endif %}
         </div>
@@ -125,11 +125,11 @@
             <div class="input-field">
             {% if details[0]['nxtofkin_phone'] %}
             <i class="material-icons prefix">phone</i>
-            <input class="validate" required="" aria-required="true" name="nxtofkin_phone" id="nxtofkin_phone" type="text" value="{{ details[0]['nxtofkin_phone'] }} "required>
+            <input class="validate" required="" aria-required="true" name="nxtofkin_phone" id="nxtofkin_phone" type="number" value="{{ details[0]['nxtofkin_phone'] }} "required>
             <label for="nxtofkin_phone">Next of kin phone-number</label>
             {% else %}
             <i class="material-icons prefix">phone</i>
-            <input class="validate" required="" aria-required="true" name="nxtofkin_phone" id="nxtofkin_phone" type="text" required>
+            <input class="validate" required="" aria-required="true" name="nxtofkin_phone" id="nxtofkin_phone" type="number" required>
             <label for="nxtofkin_phone">Next of kin phone-number</label>
             {% endif %}
         </div>
