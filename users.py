@@ -4,7 +4,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 from werkzeug.security import check_password_hash, generate_password_hash
 from . import app,db
 from .helpers import apology, send_mail,naira
-from .api import callbanks
+from .api import callbanks, verifybvn
 import string
 import random
 
@@ -45,7 +45,7 @@ def register():
         session["user_id"] = row[0]["id"]
         session["user_email"] = row[0]["email"]
         flash('You were successfully logged in')
-         return redirect(url_for('userdashboard'))
+        return redirect(url_for('userdashboard'))
     return render_template("register.html")
 
 
@@ -186,6 +186,7 @@ def edit_profile():
     """Edit  user Profile"""
     #check for session
     sess_id=session.get('user_id')
+    error = None
     if request.method=='GET':
         if check_session() is False:
             return redirect("/")
@@ -194,16 +195,17 @@ def edit_profile():
         if lsofbanks:
             return render_template("editprofile.html",details=rows,banks=lsofbanks, email= session["user_email"] )
         return render_template("editprofile.html",details=rows, email= session["user_email"])
-    if request.method=='POST':
+    if request.method=='POST': 
         bvn=request.form.get("bvn").strip()
+        validbvn = verifybvn(bvn)
+        if not len(validbvn):
+           error = "Please input a valid bvn number"
+           return render_template("apply.html", error = error) 
         acctno=request.form.get("acctno").strip()
-
         first_name=request.form.get("first_name").strip()
         last_name=request.form.get("last_name").strip()
         phone=request.form.get("phone").strip()
         bank_name=request.form.get("bank_name")
-        print(bank_name)
-        # identification=request.form.get("identification").strip()
         address=request.form.get("address").strip()
         nxtofkin=request.form.get("nxtofkin").strip()
 
