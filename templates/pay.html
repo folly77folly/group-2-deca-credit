@@ -124,6 +124,10 @@
             alert('Repayment Cannot be less than Loan Balance');
             $('#amount').focus();
 			event.preventDefault();
+		}	else if(Number(repayment)+Number(balance)>0){
+            alert('Repayment Cannot be More than Outstanding Loan');
+            $('#amount').focus();
+			event.preventDefault();
 		}  
        
         else{

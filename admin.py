@@ -22,8 +22,9 @@ def loan_approval(uid):
         user_id = loan[0]["user_id"]
         userdetails = db.execute(f"SELECT * FROM users WHERE id= '{user_id}'")
         bvn=userdetails[0]["bvn"]
+        email=userdetails[0]["email"]
         bvndetails=verifybvn(bvn)
-        return render_template("approval.html",userdetails=userdetails[0],bvndetails=bvndetails, loan=loan[0], uid=uid)
+        return render_template("approval.html",email=email,userdetails=userdetails[0],bvndetails=bvndetails, loan=loan[0], uid=uid)
     if request.method=='POST':
         loansrec=db.execute(f"select * from loans where id='{uid}' and status= 'pending'")
         user_id=loansrec[0]["user_id"]
@@ -103,7 +104,8 @@ def allusers():
         return redirect("/")
     user_id=session.get('user_id')
     email=session.get('user_email')   
-    usersrow = db.execute(f"SELECT * FROM users")
+    role=0
+    usersrow = db.execute(f"SELECT * FROM users where role ='{role}'")
     return render_template("users.html", users = usersrow,email=email)
 
 @app.route('/loan_reject',methods=['GET'])

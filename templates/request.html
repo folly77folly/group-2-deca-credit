@@ -61,9 +61,9 @@
           <tr>
             <td>{{loop.index}}</td>
             <td>{{loan["id"]}}</td>
-            <td>{{loan["amount"]}}</td>
+            <td>{{ "{:,.2f}".format(loan["amount"]) }}</td>
             <td>{{loan["tenor"]}}</td>
-            <td>{{loan["installment"]}}</td>
+            <td>{{ "{:,.2f}".format(loan["installment"]) }}</td>
             <td><a href="{{ url_for('loan_approval',uid=loan.id) }}">View Details</a></td>
           </tr>
           {% endfor %}

@@ -67,9 +67,9 @@
           <div class="col s12">
               <div class="z-depth-5 details">
                 <h6 style="color: black;">LOAN DETAILS</h6>
-                <p>Amount: {{loan["amount"]}}</p>
-                <p>Monthly Payment: {{loan["installment"]}}</p>
-                <p>User Balance: {{loan["balance"]}}</p>
+                <p>Requested Amount: <span>&#8358 </span> {{ "{:,.2f}".format(loan["amount"]) }}</p>
+                <p>Monthly Repayment: <span>&#8358 </span> {{ "{:,.2f}".format(loan["installment"]) }}</p>
+                <p>User Balance: <span>&#8358 </span> {{ "{:,.2f}".format(loan["balance"]) }}</p>
                 <p>Status: {{loan["status"]}}</p>
               </div>
           </div>
