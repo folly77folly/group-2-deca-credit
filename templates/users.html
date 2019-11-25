@@ -74,17 +74,16 @@
             <td>{{user["bank_name"]}}</td>
             <td>{{user["created_date"]}}</td>
             <td>
-                {% if user["active"] == 'Y'  %}
-                  <label>
+                
+                  <label class="lab">
+                  {% if user["active"] == 'Y'  %}
                   <input type="checkbox"  class="active" id="{{ user['id'] }}" checked="checked" value="Active">
                   <span>Activate/Decativate</span>
-                  </label>
                   {% else %}
-                  <label></label>
                   <input type="checkbox" class="active" id="{{ user['id'] }}" >
                   <span>Activate/Decativate</span>
+                  {% endif %} 
                 </label>
-                {% endif %}
             </td>
           </tr>
           {% endfor %}

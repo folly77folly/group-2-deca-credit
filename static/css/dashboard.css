@@ -12,18 +12,6 @@
     background-repeat: no-repeat;
     height: 100vh;
    }
-   .diff::after{
-    content:'';
-    background-image: url('../images/dash2.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display:block;
-    filter: blur(10px);
-    -webkit-filter: blur(10px);
-    height: 100vh;
-   
-   }
    .content{
      position: absolute;
      z-index: 1;
@@ -153,7 +141,7 @@
      background-color: #2274F0;
      color: white;
    }
-   span{
+   #span{
        top: 80px;
    }
    .input-field .prefix.active {
