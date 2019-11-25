@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 
 def verifybvn(data):
         headers = {
-        'Authorization': 'Bearer sk_test_1b09bbe3bf87631c4513fdc1ed511501e7c5441b',
+        'Authorization': 'Bearer sk_test_a353af4cc1a449a241fe5edd1e23b0b465b47a6b',
         'Content-Type': 'application/json',
         }
         # data=""
@@ -29,6 +29,8 @@ def verifybvn(data):
         array = []
         if response:
             response=response.json()
+            print('bvn details')
+            print(response)
             for items in response["data"].values():
                 array.append(items)
             # dictresponse=response.json()
@@ -47,4 +49,5 @@ def callbanks():
             array = []
             for i in range(len(dictresponse["data"])):
                 array.append(dictresponse["data"][i]["name"])
-            return array          
+            return array 
+         
