@@ -51,7 +51,7 @@
             <div class="input-field">
             {% if details[0]['acctno'] %}
             <i class="tiny material-icons prefix">account_balance</i>
-            <input id =acctno autocomplete="off" class="validate" required="" aria-required="true" name="acctno" value="{{ details[0]['acctno'] }} " type="number" required>
+            <input id =acctno autocomplete="off" class="validate" required="" aria-required="true" name="acctno" value="{{ details[0]['acctno'] }}" type="number" required>
             <label for="acctno">Account Number</label>
             {% else %}
             <i class="small material-icons prefix">account_balance</i>
@@ -62,18 +62,18 @@
             <div class="input-field">
             {% if details[0]['bvn'] %}
             <i class="material-icons prefix">vpn_key</i>
-            <input class="validate" required="" aria-required="true" name="bvn" id="bvn" type="number" value="{{ details[0]['bvn'] }} " required>
+            <input class="validate" required="" aria-required="true" name="bvn" id="bvn" type="number" value="{{ details[0]['bvn'] }}" required>
             <label for="bvn">Bvn</label>
             {% else %}
             <i class="material-icons prefix">vpn_key</i>
-            <input onblur="dobvn();" class="validate" required="" aria-required="true" name="bvn" id="bvn" type="number" required>
+            <input class="validate" required="" aria-required="true" name="bvn" id="bvn" type="number" required>
             <label for="bvn">Bvn</label>
             {% endif %}
             </div>
             <div class="input-field">
             {% if details[0]['first_name'] %}
             <i class="material-icons prefix">person</i>
-            <input class="validate" required="" aria-required="true" name="first_name" id="first_name" type="text" value="{{ details[0]['first_name'] }} " required>
+            <input class="validate" required="" aria-required="true" name="first_name" id="first_name" type="text" value="{{ details[0]['first_name'] }}" required>
             <label for="first_name">First Name</label>
             {% else %}
             <i class="material-icons prefix">person</i>
@@ -84,7 +84,7 @@
             <div class="input-field">
             {% if details[0]['last_name'] %}
             <i class="material-icons prefix">person</i>
-            <input class="validate" required="" aria-required="true" name="last_name" id="last_name" type="text" value="{{ details[0]['last_name'] }} " required>
+            <input class="validate" required="" aria-required="true" name="last_name" id="last_name" type="text" value="{{ details[0]['last_name'] }}" required>
             <label for="last_name">Last Name</label>
             {% else %}
             <i class="material-icons prefix">person</i>
@@ -95,7 +95,7 @@
             <div class="input-field">
             {% if details[0]['phone'] %}
             <i class="material-icons prefix">phone</i>
-            <input class="validate" required="" aria-required="true" name="phone" id="phone" type="number" value="{{ details[0]['phone'] }} "required>
+            <input class="validate" required="" aria-required="true" name="phone" id="phone" type="number" value="{{ details[0]['phone'] }}"required>
             <label for="phone">Phone Number</label>
             {% else %}
             <i class="material-icons prefix">phone</i>
@@ -106,7 +106,7 @@
             <div class="input-field">
             {% if details[0]['address'] %}
             <i class="material-icons prefix">house</i>
-            <input class="validate" required="" aria-required="true" name="address" id="address" type="text"  value="{{ details[0]['address'] }} "required>
+            <input class="validate" required="" aria-required="true" name="address" id="address" type="text"  value="{{ details[0]['address'] }}"required>
             <label for="address">Address</label>
             {% else %}
             <i class="material-icons prefix">house</i>
@@ -117,7 +117,7 @@
             <div class="input-field">
             {% if details[0]['nxtofkin'] %}
             <i class="material-icons prefix">person</i>
-            <input class="validate" required="" aria-required="true" name="nxtofkin" id="nxtofkin" type="text" value="{{ details[0]['nxtofkin'] }} "required>
+            <input class="validate" required="" aria-required="true" name="nxtofkin" id="nxtofkin" type="text" value="{{ details[0]['nxtofkin'] }}"required>
             <label for="nxtofkin">Next of kin</label>
             {% else %}
             <i class="material-icons prefix">person</i>
@@ -128,7 +128,7 @@
             <div class="input-field">
             {% if details[0]['nxtofkin_phone'] %}
             <i class="material-icons prefix">phone</i>
-            <input class="validate" required="" aria-required="true" name="nxtofkin_phone" id="nxtofkin_phone" type="number" value="{{ details[0]['nxtofkin_phone'] }} "required>
+            <input class="validate" required="" aria-required="true" name="nxtofkin_phone" id="nxtofkin_phone" type="number" value="{{ details[0]['nxtofkin_phone'] }}"required>
             <label for="nxtofkin_phone">Next of kin phone-number</label>
             {% else %}
             <i class="material-icons prefix">phone</i>
@@ -179,7 +179,30 @@
           alert('BVN  Must be 11 digits Only!!!');
           $('#bvn').focus();
         event.preventDefault();
+      }else if(bvn.length == 11){
+urldata = 'textstr='+ bvn
+$.ajax({
+    url:'/bvn_check',
+    data:urldata,
+    type:'GET',
+    dataType: 'json',
+    success:function(tt){
+      alert("success");
+        console.log(tt.status)
+        if (tt.status=='false'){
+          alert("Invalid BVN Details");
+          $('#bvn').val('');
+          event.preventDefault();
+        }        
+        },
+        error:function(anyv){
+            console.log(anyv)
+        }
+
+    })
       }
+
+
   }
 
   function dobvn(){
@@ -187,27 +210,7 @@
   if (data.length!== 11){
     alert("BVN Must be 11 digits")
   }else{
-    urldata = 'textstr='+ data
-$.ajax({
-    url:'/bvn_check',
-    data:urldata,
-    type:'GET',
-    dataType: 'json',  
-    success:function(tt){
-        console.log(tt.status)
-        if (tt.status=='false'){
-          alert("Invalid BVN Details");
-          $('#bvn').val('');
-        }else{
-          alert("Valid BVN Details");
-        }
-        
-        },
-        error:function(anyv){
-            console.log(anyv)
-        }
-
-    })    
+    
   }
 
 

@@ -6,6 +6,7 @@ from . import app,db
 from .helpers import apology, send_mail,naira
 from .api import callbanks, verifybvn
 import string
+import requests
 import random
 
 @app.route("/")
@@ -147,7 +148,6 @@ def apply():
             return render_template("apply.html", error = error)
         user = db.execute(f"SELECT * FROM users WHERE email= '{email}'")
         if user[0]["bvn"] == None:
-            flash("please update your profile")
             return redirect("/edit")
         elif user[0]["cbalance"] < 0:
             error = "please pay up your outstanding loan"
@@ -159,7 +159,7 @@ def apply():
         return redirect(url_for('userdashboard'))
     if check_session() is False:
         return render_template("index.html")
-    return render_template("apply.html")
+    return render_template("apply.html",email= session["user_email"])
 
 @app.route('/history')
 def history():
@@ -208,6 +208,7 @@ def edit_profile():
         rows = db.execute(f"select * from users where id = '{sess_id}'")
         lsofbanks=callbanks()
         if lsofbanks:
+            print(rows[0]['acctno'])
             return render_template("editprofile.html",details=rows,banks=lsofbanks, email= session["user_email"] )
         return render_template("editprofile.html",details=rows, email= session["user_email"])
     if request.method=='POST': 
@@ -396,7 +397,21 @@ def checkbvn():
     print('u')
     print(u)
     validbvn = verifybvn(u)
+    print('validbvn')
     print(validbvn)
     if validbvn==[]:
+        print('status:false')
         return json.dumps({'status':'false'})
     return json.dumps({'status':'true'})
+
+@app.route("/bvn",methods=['GET'])
+def verifybvns():
+        headers = {
+        'Authorization': 'Bearer sk_test_a353af4cc1a449a241fe5edd1e23b0b465b47a6b',
+        #sk_test_4453653f242fbcefc392d364d4d79a9dfd321789
+        'Content-Type': 'application/json',
+        }
+        data="22159227637"
+        response = requests.get('https://api.paystack.co/bank/resolve_bvn/'+data, headers=headers)
+        dictres=response.json()
+        return dictres

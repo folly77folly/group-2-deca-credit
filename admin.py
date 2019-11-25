@@ -66,7 +66,8 @@ def outstanding():
     email=session.get('user_email')        
     status = "approved"
     repaid = 0
-    outstanding = db.execute(f"SELECT * FROM loans WHERE status = '{status}' AND repaid = '{repaid}'")
+    # outstanding = db.execute(f"SELECT * FROM loans WHERE status = '{status}' AND repaid = '{repaid}'")
+    outstanding = db.execute(f"select * from loans INNER JOIN users where users.id=loans.user_id and status = '{status}' AND repaid = '{repaid}'")
     sumloan=db.execute(f"select sum(balance) as bal from loans where status = '{status}' AND repaid = '{repaid}'")
     T_sum=sumloan[0]["bal"]
     if T_sum is None:
@@ -111,8 +112,9 @@ def allusers():
 @app.route('/loan_reject',methods=['GET'])
 def rejectloan():
     u=request.args.get('textstr')
-    db.execute(f"update loans set status= 2 where id='{u}'")
-    user_id=session.get('user_id')
+    db.execute(f"update loans set status= 'rejected' where id='{u}'")
+    loanrec=db.execute(f"select * from loans  where id='{u}'")
+    user_id=loanrec[0]["user_id"]
     userrow=db.execute(f"Select * from users where id='{user_id}'")
     surname=userrow[0]["last_name"]
     firstname=userrow[0]["first_name"]
@@ -124,7 +126,7 @@ def rejectloan():
     <p>for more info contact Management on <a href='#'>08030785155</a> </p>\
     <p>Click on the <a href='#'>Link</a> to login</p>"  
     loanid=request.args.get('textstr')
-    db.execute(f"update loans set status= 2 where id='{loanid}'")
+    db.execute(f"update loans set status= 'rejected' where id='{loanid}'")
     send_mail(email,subject,message)
     return json.dumps({'rejected':'2'})
 
@@ -141,3 +143,21 @@ def activate():
     else:
         db.execute(f"update users set active= 'Y' where id='{u}'")
     return json.dumps({'rejected':'1'})
+
+
+@app.route("/paidloans")
+def paidloans():
+    """admin view paid loans"""
+    if  check_session() is False:
+        return redirect("/")
+    user_id=session.get('user_id')
+    email=session.get('user_email')        
+    status = "approved"
+    repaid = 1
+    # outstanding = db.execute(f"SELECT * FROM loans WHERE status = '{status}' AND repaid = '{repaid}'")
+    outstanding = db.execute(f"select * from loans INNER JOIN users where users.id=loans.user_id and status = '{status}' AND repaid = '{repaid}'")
+    sumloan=db.execute(f"select sum(balance) as bal from loans where status = '{status}' AND repaid = '{repaid}'")
+    T_sum=sumloan[0]["bal"]
+    if T_sum is None:
+        T_sum=0
+    return render_template("paidloans.html", outstanding = outstanding,email=email,total=naira(T_sum))

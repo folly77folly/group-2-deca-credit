@@ -34,6 +34,7 @@
     <li><a href="/admin">Dashboard</a></li>
     <li><a href="/request">View loan Request</a></li>
     <li><a href="/outstanding">View outstanding loans</a></li>
+    <li><a href="/paidloans">View paid loans</a></li>
     <li><a href="/allusers">View All Users</a></li>
   </ul>
   <a href="#" data-target="slide-out" class="sidenav-trigger">
@@ -74,7 +75,7 @@
               </div>
           </div>
           <form action="{{ url_for('loan_approval',uid=loan.id) }}" method="POST">
-          <div class="col s6 center"><button class="btn btn-large" type="submit" >Submit</button></div><div class="col s6 center"><input  class="btn btn-large"  type="button" onclick="doloanreject()" value="Reject"></div>
+          <div class="col s6 center"><button class="btn btn-large" type="submit" >Approve</button></div><div class="col s6 center"><input  class="btn btn-large"  type="button" onclick="doloanreject()" value="Reject"></div>
           <input type ="hidden" value="{{ uid }}" id ="loanid" name ="loanid">
           </form>
   </div>

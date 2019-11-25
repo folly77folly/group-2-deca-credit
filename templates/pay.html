@@ -53,7 +53,7 @@
 
             <div class="input-field">
                 <i class="tiny material-icons prefix">money</i>
-                <input autocomplete="off" class="validate" required="" aria-required="true" id="amount" name="amount" type="text" required>
+                <input maxlength="10" autocomplete="off" class="validate" required="" aria-required="true" id="amount" name="amount" type="text" required>
                 <label for="acctno">Amount</label>
             </div>
 
@@ -65,7 +65,7 @@
             <div class="input-field">
             {% if row[0] %}
             <i class="tiny material-icons prefix">money</i>
-            <input readonly autocomplete="off" class="validate" required="" aria-required="true" name="balance" value="{{ row[0]['balance'] }} " type="text" required>
+            <input readonly autocomplete="off" class="validate" required="" aria-required="true" name="balance" value="{{ '{:,.2f}'.format(row[0]['balance']) }} " type="text" required>
             <label for="acctno">Balance</label>
             {% else %}
             <i class="small material-icons prefix">money</i>
@@ -76,7 +76,7 @@
             <div class="input-field">
             {% if row[0] %}
             <i class="material-icons prefix">money</i>
-            <input readonly class="validate" required="" aria-required="true" type="text" value="{{ row[0]['installment'] }} " required>
+            <input readonly class="validate" required="" aria-required="true" type="text" value="{{ '{:,.2f}'.format(row[0]['installment']) }} " required>
             <label for="bvn">Monthly Payment</label>
             {% else %}
             <i class="material-icons prefix">money</i>
