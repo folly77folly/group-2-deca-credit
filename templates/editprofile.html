@@ -41,7 +41,10 @@
   </a>
     <div class="edit">
      <div class="editing z-depth-4">
-        <form action="/edit" method="POST">
+        {% if error %}
+          <p class="error red-text"><strong>Message :</strong> {{ error }} 
+        {% endif %}      
+        <form action="/edit" method="POST" onsubmit="docheck();">
             <h4>Edit Profile</h4>
             <div class="error red-text"></div>
             <div class="success green-text"></div>
@@ -63,7 +66,7 @@
             <label for="bvn">Bvn</label>
             {% else %}
             <i class="material-icons prefix">vpn_key</i>
-            <input class="validate" required="" aria-required="true" name="bvn" id="bvn" type="number" required>
+            <input onblur="dobvn();" class="validate" required="" aria-required="true" name="bvn" id="bvn" type="number" required>
             <label for="bvn">Bvn</label>
             {% endif %}
             </div>
@@ -156,6 +159,59 @@
   $(document).ready(function(){
    $('.sidenav').sidenav()
   })
+
+  function docheck(){
+      var acctno=$('#acctno').val();
+      var bvn=$('#bvn').val();
+      if (acctno.length !== 10){
+          alert('Account Number Must be 10 digits Only!!!');
+          $('#acctno').focus();
+        event.preventDefault();
+      }else if(isNaN(acctno)==true){
+        alert('Only Numbers are Allowed!!!');
+        $('#acctno').focus();
+        event.preventDefault();        
+      }else if(isNaN(bvn)==true){
+        alert('Only Numbers are Allowed!!!');
+        $('#bvn').focus();
+        event.preventDefault();        
+      }else if (bvn.length !== 11){
+          alert('BVN  Must be 11 digits Only!!!');
+          $('#bvn').focus();
+        event.preventDefault();
+      }
+  }
+
+  function dobvn(){
+	var data=$('#bvn').val()
+  if (data.length!== 11){
+    alert("BVN Must be 11 digits")
+  }else{
+    urldata = 'textstr='+ data
+$.ajax({
+    url:'/bvn_check',
+    data:urldata,
+    type:'GET',
+    dataType: 'json',  
+    success:function(tt){
+        console.log(tt.status)
+        if (tt.status=='false'){
+          alert("Invalid BVN Details");
+          $('#bvn').val('');
+        }else{
+          alert("Valid BVN Details");
+        }
+        
+        },
+        error:function(anyv){
+            console.log(anyv)
+        }
+
+    })    
+  }
+
+
+}
   </script>
 </body>
 </html>
