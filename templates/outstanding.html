@@ -31,8 +31,7 @@
             <div class="background">
             </div>
             <a href="#user"><img class="circle" src="img/messi.jpeg"></a>
-            <a href="#name"><span class="white-text name">John Doe</span></a>
-            <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+            <a href="#email"><span class="white-text email">{{email}}</span></a>
           </div></li>    
           <li><a href="/admin">dashboard</a></li>
     <li><a href="/request">View loan Request</a></li>
@@ -62,11 +61,11 @@
       {% for loan in outstanding %}
       <tr>
         <td>{{ loan["id"] }}</td>
-        <td>{{ loan["amount"] }}</td>
+        <td>{{ "{:,.2f}".format(loan["amount"]) }}</td>
         <td>{{ loan["tenor"] }}</td>
         <td>{{ loan["status"] }}</td>
-        <td>{{ loan["installment"] }}</td>
-        <td>{{ loan["balance"] }}</td>
+        <td>{{ "{:,.2f}".format(loan["installment"]) }}</td>
+        <td>{{ "{:,.2f}".format(loan["balance"]) }}</td>
         <td>False</td>
       </tr>
       {% endfor %}
