@@ -56,8 +56,14 @@ def login_post():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+        #check active users
+        activeuser = db.execute(f"SELECT * FROM users WHERE email = '{email}' and active='Y'")
+        if not len(activeuser):
+            error = "Your Account has been Deactivated by the Admin"
+            return render_template("login.html", error = error)            
 
         user = db.execute(f"SELECT * FROM users WHERE email = '{email}'")
+        #check active users
         
         if len(user):
             if check_password_hash(user[0]["pass_word"], password):
@@ -208,8 +214,10 @@ def edit_profile():
         bvn=request.form.get("bvn").strip()
         validbvn = verifybvn(bvn)
         if not len(validbvn):
-           error = "Please input a valid bvn number"
-           return render_template("apply.html", error = error) 
+           error = "Invalid BVN Details"
+           rows = db.execute(f"select * from users where id = '{sess_id}'")
+           lsofbanks=callbanks()
+           return render_template("editprofile.html", error = error,details=rows,banks=lsofbanks, email= session["user_email"]) 
         acctno=request.form.get("acctno").strip()
         first_name=request.form.get("first_name").strip()
         last_name=request.form.get("last_name").strip()
@@ -356,8 +364,6 @@ def writetofile(msgs,email):
         t.write(email +":" + passw +"\n")
         t.close()
 
-
-
 @app.route('/contact', methods=["POST", "GET"])
 def message():
     if request.method == "POST":
@@ -376,7 +382,6 @@ def message():
             return render_template('message.html') 
         return render_template('message.html', contact=contact ) 
 
-
 @app.route('/delete/<int:id>', methods=["POST", "GET"])
 def delete(id):
     if request.method=="POST":
@@ -385,3 +390,13 @@ def delete(id):
     
         return redirect('/contact') 
     
+@app.route('/bvn_check',methods=['GET'])
+def checkbvn():
+    u=request.args.get('textstr')
+    print('u')
+    print(u)
+    validbvn = verifybvn(u)
+    print(validbvn)
+    if validbvn==[]:
+        return json.dumps({'status':'false'})
+    return json.dumps({'status':'true'})
