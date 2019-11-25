@@ -4,7 +4,7 @@
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <meta http-equiv="X-UA-Compatible" content="ie=edge">
- <title>View Loans</title>
+ <title>View Users</title>
  <link rel="stylesheet" href= https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css>
  <link rel="stylesheet" href=https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -75,9 +75,15 @@
             <td>{{user["created_date"]}}</td>
             <td>
                 {% if user["active"] == 'Y'  %}
-                  <input type="checkbox"  class="active" id="{{ user['id'] }}" checked="checked" >
+                  <label>
+                  <input type="checkbox"  class="active" id="{{ user['id'] }}" checked="checked" value="Active">
+                  <span>Activate/Decativate</span>
+                  </label>
                   {% else %}
+                  <label></label>
                   <input type="checkbox" class="active" id="{{ user['id'] }}" >
+                  <span>Activate/Decativate</span>
+                </label>
                 {% endif %}
             </td>
           </tr>

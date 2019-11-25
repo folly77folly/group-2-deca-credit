@@ -38,8 +38,9 @@ def register():
             # Query database for email
         passhash=generate_password_hash(passw)
         role=0
+        active='Y'
         # db.execute(f"insert into users(email,pass_word) values({email},{passhash})")
-        db.execute(f"insert into users(email,pass_word,role) values('{email}','{passhash}','{role}')")
+        db.execute(f"insert into users(email,pass_word,role,active) values('{email}','{passhash}','{role}','{active}')")
         row = db.execute(f"Select email from users where email='{email}'")
         row = db.execute(f"Select * from users where email='{email}'")
         session["user_id"] = row[0]["id"]
@@ -107,7 +108,7 @@ def userdashboard():
     installment = 0.0
     user_id= session["user_id"]
     userrows=db.execute(f"select * from users where id ='{user_id}'")
-    payment = db.execute(f"select * from loans where user_id ='{user_id}' AND status='approve' AND repaid='0'") 
+    payment = db.execute(f"select * from loans where user_id ='{user_id}' AND status='approved' AND repaid='0'") 
     if len(payment):
         installment = payment[0]["installment"]
     repay = db.execute(f"select * from loans where user_id ='{user_id}' AND repaid ='1'")
@@ -325,7 +326,10 @@ def resetpassword():
 
             surname=qryuser[0]["last_name"]
             firstname=qryuser[0]["first_name"]
-            fullname=surname +' '+ firstname
+            if surname or firstname is None:
+                fullname=email
+            else:
+                fullname=surname +' '+ firstname
 
             subject="Password Reset!!!"
             message=f"<h3>Dear {fullname},</h3><br>\
