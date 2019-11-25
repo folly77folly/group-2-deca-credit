@@ -364,6 +364,32 @@ def writetofile(msgs,email):
         t.write(email +":" + passw +"\n")
         t.close()
 
+@app.route('/contact', methods=["POST", "GET"])
+def message():
+    if request.method == "POST":
+        mname=request.form.get('mname')
+        memail=request.form.get('memail')
+        mphone=request.form.get('mphone')
+        message=request.form.get('message')
+        db.execute(f"INSERT INTO contacts(name,  phone, email, message)VALUES('{mname}',  '{mphone}', '{memail}', '{message}')")
+        # contact= db.execute(f"SELECT * FROM contacts")
+        return render_template('index.html') 
+    if request.method == "GET":
+        contact= db.execute(f"SELECT * FROM contacts")
+        if len(contact)==0:
+            # return "No Message Available"
+            flash("No Message Available")
+            return render_template('message.html') 
+        return render_template('message.html', contact=contact ) 
+
+@app.route('/delete/<int:id>', methods=["POST", "GET"])
+def delete(id):
+    if request.method=="POST":
+
+        contact=db.execute(f"DELETE   FROM contacts WHERE id = {id} ")
+    
+        return redirect('/contact') 
+    
 @app.route('/bvn_check',methods=['GET'])
 def checkbvn():
     u=request.args.get('textstr')
