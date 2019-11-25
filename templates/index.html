@@ -115,21 +115,23 @@
             <div class="footer-section-three">
               <div class="footer-heading"><h2>Get in touch</h2></div>
                <div class="footer-form">
-                 <form method="post" action="#">
-                   <div class="footer-form-box">
-                     <input type="text" class="footer-form-style" placeholder="Name">
-                   </div>
-                   <div class="footer-form-box">
-                     <input type="text" class="footer-form-style" placeholder="Email">
-                   </div>
-                   <div class="footer-form-box">
-                     <input type="text" class="footer-form-style" placeholder="Phone Number">
-                   </div>
-                   <div class="footer-form-box">
-                     <!-- <input type="submit" class="footer-form-submit-style" value="SUBMIT" style="background-color: blue;"> -->
-                     <button type="button" class="btn btn-primary">SUBMIT</button>
-                   </div>
-                 </form>
+                <form method="POST" action="/contact">
+                  <div class="footer-form-box">
+                    <input type="text" class="footer-form-style" name="mname" placeholder="Full Name">
+                  </div>
+                  <div class="footer-form-box">
+                    <input type="text" class="footer-form-style"  name="memail" placeholder="Email">
+                  </div>
+                  <div class="footer-form-box">
+                    <input type="text" class="footer-form-style"  name="mphone" placeholder="Phone Number">
+                  </div>
+                  <div class="footer-form-box">
+                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="message" placeholder="Enter Message"></textarea>
+                   <!-- <input type="submit" class="footer-form-submit-style" value="SUBMIT" style="background-color: blue;"> -->
+                    <button type="submit" class="btn btn-primary" name="mbutton">SUBMIT</button>
+                  </div>
+                </form>
+
                </div>
   
             </div>

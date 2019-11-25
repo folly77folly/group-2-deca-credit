@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>View Loans</title>
+ <link rel="stylesheet" href= https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css>
+ <link rel="stylesheet" href=https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+ <link href="../static/css/icon.css" rel="stylesheet">
+ <link rel="stylesheet" href="../static/css/dashboard.css">
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<header>
+  <nav class="nav-wraper">
+   <div class="container">
+    <a href="index.html" class="brand-logo"><img src="img/logo.png" alt=""></a>
+    </a>    
+    <ul class="right hide-on-med-and-down">
+     <li><a href="/admin">Home</a></li>
+     <li><a class="out" href="/logout">Logout</a></li>
+     <li><a href="#" class="btn-floating white">
+       <i class="material-icons">person</i>
+     </a></li>
+     <span class="user">Welcome abiola@gmail.com</span>
+    </ul>
+   </div>
+  </nav>
+</header>
+  <body class="bod">
+  <ul id="slide-out" class="sidenav">
+        <li><div class="user-view">
+            <div class="background">
+            </div>
+            <a href="#user"><img class="circle" src="img/messi.jpeg"></a>
+            <a href="#name"><span class="white-text name">John Doe</span></a>
+            <a href="#email"><span class="white-text email">abiola@gmail.com</span></a>
+          </div></li>    
+          <li><a href="/admin">dashboard</a></li>
+          <li><a href="/request">View loan Request</a></li>
+          <li><a href="/outstanding">View Outstanding Loans</a></li>
+          <li><a href="#">View All Users</a></li>
+          
+  </ul>
+  <a href="#" data-target="slide-out" class="sidenav-trigger">
+      <i class="material-icons menu">menu</i>
+  </a>
+   
+
+
+      {%for i in contact%}
+   <!-- <button onclick="deletefile()">click</button> -->
+      <hr>
+
+    </div>
+  </div>
+    <form method="POST", action="/delete/{{i['id']}}">
+    <!-- <div class="container">
+    <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col" style="background-color: rgb(4, 87, 240);">Id</th>
+                <th scope="col"style="background-color: rgb(4, 87, 240);">Name</th>
+                <th scope="col"style="background-color:rgb(4, 87, 240);">Phone Number</th>
+                <th scope="col"style="background-color: rgb(4, 87, 240);">Email</th>
+              </tr>
+            </thead>
+            <tbody>
+                {%for i in contact%}
+              <tr>
+                   
+                <th scope="row">{{i["id"]}}</th>
+                
+                <td>{{i["name"]}}</td>
+                <td>{{i["phone"]}}</td>
+                <td>{{i["email"]}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div> -->
+        <!-- {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %} -->
+        <div class="container" style="width: 40%;">
+        <div class="alert alert-success" role="alert">
+            <p class="alert-heading">Date:   <span style="font-size: 1em; font-weight: bold;">{{i["date"]}}</span></p><hr>
+          <p class="alert-heading">Name:   <span style="font-size: 1em; font-weight: bold;">{{i["name"]}}</span></p><hr>
+          <p class="alert-heading">Phone number:  <span style="font-size: 1em; font-weight: bold;">{{i["phone"]}}</span> </p><hr>
+          <p class="alert-heading">Email:  <span style="font-size: 1em; font-weight: bold;">{{i["email"]}}</span> </p><hr>
+       <p> Message: <span style="font-size: 1em; font-weight: bold;"> {{i["message"]}}</span> </p> <hr>
+       <button  type="submit" class="btn btn-danger" value="{{i['id']}}" id="deletebtn" name="deletebtn" > Delete</button>
+       <!-- <button onclick="deletefile()">click</button> -->
+          <hr>
+    
+        </div>
+      </div>
+    
+    </form>
+    {% endfor %}
+    <div class="container" style="width: 40%;">
+      <div class="alert alert-success" role="alert">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <p class="notification is-danger" style="font-size: 1em; font-weight: bold;">
+                {{ messages[0] }}
+            </p>
+        {% endif %}
+        {% endwith %}
+      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+      <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+      <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+    
+
+  $(document).on('click', '.active', function( e ){
+        var that = $(this);
+        var id = that.attr('id');
+    	  urldata = 'textstr='+ id
+	      // alert(urldata)
+        $.ajax({
+        url:'/activate',
+        data:urldata,
+        type:'GET',
+        dataType: 'json',
+        success:function(tt){
+        // alert("User De Successfully")
+		    // window.location.href="/allusers";
+		
+        },
+        error:function(anyv){
+            console.log(anyv)
+        }
+
+        })
+
+        // var rel = that.data('rel');
+        // var ajaxurl = that.data('url');
+        //     alert(id);
+       function deletefile(){
+        let deleteBtn = document.querySelector("#deletebtn").value
+     console.log("i was clicked")
+    /* $.ajax({
+        url:'/delete',
+        data:deleteBtn,
+        type:'POST',
+        dataType: 'json',
+        success:function(tt){
+            // console.log(tt)
+            alert(tt)
+
+        }
+          
+     })*/
+ }
+
+    })
+</script>
+</body>
+</html>
