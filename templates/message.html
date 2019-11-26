@@ -24,7 +24,7 @@
      <li><a href="#" class="btn-floating white">
        <i class="material-icons">person</i>
      </a></li>
-     <span class="user">Welcome abiola@gmail.com</span>
+     <span class="user">Welcome {{email}}</span>
     </ul>
    </div>
   </nav>
@@ -34,8 +34,7 @@
         <li><div class="user-view">
             <div class="background">
             </div>
-            <a href="#user"><img class="circle" src="img/messi.jpeg"></a>
-            <a href="#email"><span class="white-text email">{{ email }}/span></a>
+            <a href="#email"><span class="white-text email">{{ email }}</span></a>
           </div></li>    
           <li><a href="/admin">dashboard</a></li>
           <li><a href="/request">View loan Request</a></li>
@@ -120,50 +119,9 @@
       <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 
   <script>
-    
-
-  $(document).on('click', '.active', function( e ){
-        var that = $(this);
-        var id = that.attr('id');
-    	  urldata = 'textstr='+ id
-	      // alert(urldata)
-        $.ajax({
-        url:'/activate',
-        data:urldata,
-        type:'GET',
-        dataType: 'json',
-        success:function(tt){
-        // alert("User De Successfully")
-		    // window.location.href="/allusers";
-		
-        },
-        error:function(anyv){
-            console.log(anyv)
-        }
-
-        })
-
-        // var rel = that.data('rel');
-        // var ajaxurl = that.data('url');
-        //     alert(id);
-       function deletefile(){
-        let deleteBtn = document.querySelector("#deletebtn").value
-     console.log("i was clicked")
-    /* $.ajax({
-        url:'/delete',
-        data:deleteBtn,
-        type:'POST',
-        dataType: 'json',
-        success:function(tt){
-            // console.log(tt)
-            alert(tt)
-
-        }
-          
-     })*/
- }
-
-    })
+  $(document).ready(function(){
+   $('.sidenav').sidenav()
+  })
 </script>
 </body>
 </html>
