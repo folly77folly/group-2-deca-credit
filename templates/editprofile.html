@@ -163,6 +163,8 @@
   function docheck(){
       var acctno=$('#acctno').val();
       var bvn=$('#bvn').val();
+      var phone=$('#phone').val();
+      var nphone=$('#nxtofkin_phone').val();
       if (acctno.length !== 10){
           alert('Account Number Must be 10 digits Only!!!');
           $('#acctno').focus();
@@ -179,6 +181,22 @@
           alert('BVN  Must be 11 digits Only!!!');
           $('#bvn').focus();
         event.preventDefault();
+      }else if(isNaN(phone)==true){
+        alert('Only Numbers are Allowed in Phone Number!!!');
+        $('#phone').focus();
+        event.preventDefault();        
+      }else if (phone.length !== 11){
+          alert('Phone Number Must be 11 digits Only!!!');
+          $('#phone').focus();
+        event.preventDefault();
+      }else if (nphone.length !== 11){
+          alert('Next of Phone Number Must be 11 digits Only!!!');
+          $('#phone').focus();
+        event.preventDefault();
+      }else if(isNaN(nphone)==true){
+        alert('Only Numbers are Allowed in Next of Kin Phone Number!!!');
+        $('#nphone').focus();
+        event.preventDefault();        
       }else if(bvn.length == 11){
 urldata = 'textstr='+ bvn
 $.ajax({
@@ -187,10 +205,11 @@ $.ajax({
     type:'GET',
     dataType: 'json',
     success:function(tt){
-      alert("success");
+      // alert("success");
         console.log(tt.status)
         if (tt.status=='false'){
           alert("Invalid BVN Details");
+          event.preventDefault();
           $('#bvn').val('');
           event.preventDefault();
         }        
