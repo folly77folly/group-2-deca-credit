@@ -386,8 +386,8 @@ def message():
         if len(contact)==0:
             # return "No Message Available"
             flash("No Message Available")
-            return render_template('message.html') 
-        return render_template('message.html', contact=contact) 
+            return render_template('message.html', email = session["user_email"]) 
+        return render_template('message.html', contact=contact, email = session["user_email"] ) 
 
 @app.route('/delete/<int:id>', methods=["POST", "GET"])
 def delete(id):
