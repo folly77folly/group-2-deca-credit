@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 
 def verifybvn(data):
         headers = {
-        'Authorization': 'Bearer sk_test_a353af4cc1a449a241fe5edd1e23b0b465b47a6b',
+        'Authorization': 'Bearer sk_test_4453653f242fbcefc392d364d4d79a9dfd3217899',
         'Content-Type': 'application/json',
         }
         # data=""

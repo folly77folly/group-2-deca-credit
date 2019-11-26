@@ -56,12 +56,7 @@ def login_post():
     error = None
     if request.method == 'POST':
         email = request.form.get('email')
-        password = request.form.get('password')
-        #check active users
-        activeuser = db.execute(f"SELECT * FROM users WHERE email = '{email}' and active='Y'")
-        if not len(activeuser):
-            error = "Your Account has been Deactivated by the Admin"
-            return render_template("login.html", error = error)            
+        password = request.form.get('password')        
 
         user = db.execute(f"SELECT * FROM users WHERE email = '{email}'")
         #check active users
@@ -75,6 +70,13 @@ def login_post():
                     # return render_template("admin.html", email= session["user_email"])
                     return redirect(url_for('admindashboard'))
                 name=user[0]['first_name']
+                ##################################
+                #check active users
+                activeuser = db.execute(f"SELECT * FROM users WHERE email = '{email}' and active='Y'")
+                if not len(activeuser):
+                    error = "Your Account has been Deactivated by the Admin"
+                    return render_template("login.html", error = error) 
+                #########################
                 if name is None:
                     fmessage="Welcome Back ,"
                 else:
@@ -103,11 +105,13 @@ def admindashboard():
     unverifiedrows=db.execute("select * from users where bvn =' '")
     loanrows=db.execute("select * from loans where status='pending'")
     defaulterrows=db.execute("select * from loans where status='approved' and repaid='0'")
+    paidrows=db.execute("select * from loans where status='approved' and repaid='1'")
     allusers=len(userrows)
     pendingloans=len(loanrows)
     defaulters=len(defaulterrows)
     unverified=len(unverifiedrows)
-    return render_template("admin.html", email= session["user_email"],allusers=allusers,pendingloans=pendingloans,defaulters=defaulters,unverified=unverified)
+    paidloans=len(paidrows)
+    return render_template("admin.html", email= session["user_email"],allusers=allusers,pendingloans=pendingloans,defaulters=defaulters,unverified=unverified,paidloans=paidloans)
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -177,7 +181,7 @@ def history():
     
     total = Tcredits - Tdebits
     
-    return render_template('history.html', history=history, total=total, Tcredits=Tcredits,Tdebits=Tdebits)
+    return render_template('history.html', history=history, total=total, Tcredits=Tcredits,Tdebits=Tdebits,email= session["user_email"])
 
 @app.route("/logout")
 def logout():
@@ -283,19 +287,21 @@ def loanrepayment():
     balance=float(userrow[0]["cbalance"])
     repaid=0
     newbalance=balance+loanrepay
-    description="Loan Repayment using paystack"
+    description="Loan Repayment using Paystack"
     debit=0
     credit=loanrepay
-
+    print(balance)
+    print(loanrepay)
+    print(newbalance)
     if newbalance>= 0:
         repaid=1
     db.execute(f"update users set cbalance='{newbalance}' where id='{user_id}'")
-    db.execute(f"update loans set balance='{newbalance}', repaid='{repaid}' where id='{user_id}'")
+    db.execute(f"update loans set balance='{newbalance}', repaid='{repaid}' where id='{loan_id}'")
     db.execute(f"insert into tnxledger(user_id,loan_id,description,debit,credit,approved_by)values('{user_id}','{loan_id}','{description}','{debit}','{credit}','{user_id}')")
     
     #Compling Mail
 
-    subject="Loan Rejected !!!"
+    subject="Loan Repayment !!!"
     message=f"<h3>Dear {fullname},</h3><br>\
     <b>This is to inform you that a loan has been repaid </b>\
     <p>for more info contact Management on <a href='#'>08030785155</a> </p>\
@@ -381,7 +387,7 @@ def message():
             # return "No Message Available"
             flash("No Message Available")
             return render_template('message.html') 
-        return render_template('message.html', contact=contact ) 
+        return render_template('message.html', contact=contact) 
 
 @app.route('/delete/<int:id>', methods=["POST", "GET"])
 def delete(id):
@@ -407,11 +413,11 @@ def checkbvn():
 @app.route("/bvn",methods=['GET'])
 def verifybvns():
         headers = {
-        'Authorization': 'Bearer sk_test_a353af4cc1a449a241fe5edd1e23b0b465b47a6b',
+        'Authorization': 'Bearer sk_test_4453653f242fbcefc392d364d4d79a9dfd3217899',
         #sk_test_4453653f242fbcefc392d364d4d79a9dfd321789
         'Content-Type': 'application/json',
         }
-        data="22159227637"
+        data="22363351175"
         response = requests.get('https://api.paystack.co/bank/resolve_bvn/'+data, headers=headers)
         dictres=response.json()
         return dictres
