@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 # from . import app,db
 # from .helpers import apology, send_mail,naira
 # from .api import callbanks, verifybvn
-import app,db
+import app
 import apology, send_mail,naira
 import callbanks, verifybvn
 
