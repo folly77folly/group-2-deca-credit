@@ -52,4 +52,5 @@ app.config['SECRET_KEY'] = '8985435345359'
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///credit.db")
 
-from . import users,admin
+# from . import users,admin
+import users,admin
