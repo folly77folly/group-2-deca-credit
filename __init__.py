@@ -3,7 +3,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 # from flask_session import Session
 # from tempfile import mkdtemp
 from flask_mail import Mail, Message
-from . import send_mail
+from group-2-deca-credit/helpers import send_mail
 
 app = Flask(__name__)
 
