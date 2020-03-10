@@ -2,9 +2,10 @@ from cs50 import SQL
 from flask import Flask, flash, jsonify, redirect, render_template, request, session,json,url_for,abort,session
 # from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
-from . import app,db
+# from . import app,db
 # from .helpers import apology, send_mail,naira
 # from .api import callbanks, verifybvn
+import app,db
 import apology, send_mail,naira
 import callbanks, verifybvn
 
